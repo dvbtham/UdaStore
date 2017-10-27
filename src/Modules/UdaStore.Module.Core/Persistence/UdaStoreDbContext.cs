@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using UdaStore.Infrastructure;
 using UdaStore.Infrastructure.Data;
 using UdaStore.Infrastructure.Models;
-using UdaStore.Module.ActivityLog.Models;
 using UdaStore.Module.Core.Models;
 
 namespace UdaStore.Module.Core.Persistence

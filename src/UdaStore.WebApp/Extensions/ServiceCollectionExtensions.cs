@@ -4,11 +4,17 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.CodeAnalysis;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UdaStore.Infrastructure;
+using UdaStore.Infrastructure.Data;
 using UdaStore.Infrastructure.Web.ModelBinders;
+using UdaStore.Module.Core.Data;
 
 namespace UdaStore.WebApp.Extensions
 {
@@ -95,6 +101,38 @@ namespace UdaStore.WebApp.Extensions
 
             return services;
         }
-        
+
+        public static IServiceProvider Build(this IServiceCollection services,
+            IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>));
+            builder.RegisterGeneric(typeof(RepositoryWithTypedId<,>)).As(typeof(IRepositoryWithTypedId<,>));
+
+            builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly).AsImplementedInterfaces();
+            builder.Register<SingleInstanceFactory>(ctx =>
+            {
+                var c = ctx.Resolve<IComponentContext>();
+                return t => c.Resolve(t);
+            });
+
+            builder.Register<MultiInstanceFactory>(ctx =>
+            {
+                var c = ctx.Resolve<IComponentContext>();
+                return t => (IEnumerable<object>)c.Resolve(typeof(IEnumerable<>).MakeGenericType(t));
+            });
+
+            foreach (var module in GlobalConfiguration.Modules)
+            {
+                builder.RegisterAssemblyTypes(module.Assembly).AsImplementedInterfaces();
+            }
+
+            builder.RegisterInstance(configuration);
+            builder.RegisterInstance(hostingEnvironment);
+            builder.Populate(services);
+            var container = builder.Build();
+            return container.Resolve<IServiceProvider>();
+        }
+
     }
 }
