@@ -1,0 +1,29 @@
+<form #f="ngForm" (ngSubmit)="save(f.value)">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title">Thông tin Nhóm thuộc tính sản phẩm</h3>
+          </div>
+          <div class="box-body">
+            <div class="form-group">
+              <label for="name">Tên nhóm</label>
+              <input type="text" required #name="ngModel"
+                     class="form-control" 
+                     name="name"
+                     id="name" [(ngModel)]="atrributeGroup.name"
+                     placeholder="Nhập tên nhóm">
+  
+              <div class="alert alert-danger" *ngIf="name.touched && name.invalid">
+                Tên nhóm là bắt buộc.
+              </div>
+            </div>  
+          </div>
+          <div class="box-footer">
+            <button class="btn btn-primary" type="submit" [disabled]="!f.valid">Lưu lại</button>
+            <a class="btn btn-danger" [routerLink]="['/product-attribute-group']">Hủy</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>

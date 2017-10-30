@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { BrandService } from '../../services/brand.service';
 import { DataTableTranslations, DataTable, DataTableResource } from 'data-table-angular-4-bootstrap-3/src';
-import { Brand } from '../../models/brand';
 import { ToastyService } from 'ng2-toasty';
 import { Router } from '@angular/router';
+import { BrandService } from '../../../services/catalog/brand.service';
+import { Brand } from '../../../models/catalog/brand';
 
 @Component({
   selector: 'app-brand',
@@ -52,6 +52,12 @@ export class BrandComponent {
   cellColor(car) {
     return 'rgb(255, 255,' + (155 + Math.floor(100 - ((car.rating - 8.7) / 1.3) * 100)) + ')';
   };
+
+  isPublishedToggle(id: number) {
+    const brand = this.brands.find(x => x.id === id);
+    brand.isPublished = !brand.isPublished;
+    this.brandService.update(id, brand).subscribe();
+  }
 
   delete(id: number) {
     if (!confirm('Bạn có chắc chắn xóa?')) return;

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { Brand } from '../models/brand';
+import { Brand } from '../../models/catalog/brand';
 
 @Injectable()
 export class BrandService {

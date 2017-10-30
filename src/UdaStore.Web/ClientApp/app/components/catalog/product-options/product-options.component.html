@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="col-md-12">
+          <div class="box box-primary">
+              <div class="box-body">
+                      <p>
+                         <a routerLink="/product-options/new" class="btn btn-primary">Thêm mới</a>
+                      </p>
+                      <p>
+                          <input 
+                              #query
+                              (keyup)="filter(query.value)"
+                              type="text" class="form-control" placeholder="Nhập từ khóa để tìm...">
+                       </p>
+                  <data-table
+                  headerTitle="Tùy chọn sản phẩm"
+                  [items]="items"
+                  [itemCount]="itemCount"
+                  (reload)="reload($event)"
+          
+                  [limit]="10"
+                  [sortBy]="'rating'"
+                  [sortAsc]="false"
+          
+                  [selectColumn]="false"
+                  [multiSelect]="true"
+                  [substituteRows]="false"
+                  [expandableRows]="false"
+                  [translations]="translations"
+                  [indexColumnHeader]="'#'"
+                  [selectOnRowClick]="false"
+                  >
+                  
+                  <data-table-column
+                      [property]="'name'"
+                      [header]="'Tên'"
+                      [sortable]="true">
+                  </data-table-column>
+                 
+                  <data-table-column
+                      [property]="'id'"  
+                      [header]="'Thao tác'"
+                  >
+                      <ng-template #dataTableCell let-item="item">
+                          <a class="btn btn-info btn-xs" [routerLink]="['/product-options/', item.id]">
+                              <i class="fa fa-edit"></i>
+                          </a>
+                      </ng-template>
+                  </data-table-column>
+              </data-table>
+              </div>
+            </div>
+      </div>
+  </div>

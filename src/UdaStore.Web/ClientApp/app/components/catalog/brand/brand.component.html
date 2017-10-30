@@ -29,9 +29,9 @@
                 [indexColumnHeader]="'#'"
                 [selectOnRowClick]="false"
                 >
-                <template #dataTableExpand let-item="item">
+                <ng-template #dataTableExpand let-item="item">
                     <div [textContent]="item.description" style="padding: 5px; color: gray"></div>
-                </template>
+                </ng-template>
                 <data-table-column
                     [property]="'name'"
                     [header]="'Tên'"
@@ -44,7 +44,7 @@
 
                     <ng-template #dataTableCell let-item="item">
                         <i *ngIf="item.isPublished" class="fa fa-check-square text-success"></i>
-                        <i *ngIf="!item.isPublished" class="fa fa-check-square-o text-danger"></i>
+                        <i *ngIf="!item.isPublished" class="fa fa-times text-danger"></i>
                      </ng-template>
                 </data-table-column>
                 <data-table-column
@@ -57,6 +57,10 @@
                         </a>
                         <a class="btn btn-danger btn-xs" (click)="delete(item.id)">
                             <i class="fa fa-trash"></i>
+                        </a>
+                        <a class="btn btn-warning btn-xs" (click)="isPublishedToggle(item.id)">
+                            <i *ngIf="!item.isPublished" title="Công bố" class="fa fa-play text-success"></i>
+                            <i *ngIf="item.isPublished" title="Ngưng công bố" class="fa fa-pause text-danger"></i>
                         </a>
                     </ng-template>
                 </data-table-column>

@@ -16,6 +16,7 @@ namespace UdaStore.Web.Mapping
         private void DomainToResource()
         {
             CreateMap<Brand, BrandResource>();
+            CreateMap<ProductAttributeGroup, ProductAttributeGroupResource>();
         }
         private void ResourceToDomain()
         {

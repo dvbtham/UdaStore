@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { Brand } from '../../../models/brand';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BrandService } from '../../../services/brand.service';
 import { ToastyService } from 'ng2-toasty';
+import { BrandService } from '../../../../services/catalog/brand.service';
+import { Brand } from '../../../../models/catalog/brand';
 
 @Component({
   selector: 'app-brand-form',
   templateUrl: './brand-form.component.html',
   styleUrls: ['./brand-form.component.css']
 })
-export class BrandFormComponent implements OnInit {
+export class BrandFormComponent {
 
-  
+
   brand: Brand = new Brand();
   id: number;
   isPublished: boolean = true;
@@ -38,8 +38,4 @@ export class BrandFormComponent implements OnInit {
     });
 
   }
-
-  ngOnInit() {
-  }
-
 }
