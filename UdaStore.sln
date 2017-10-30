@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UdaStore.Module.Search", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UdaStore.Module.Vendor", "src\Modules\UdaStore.Module.Vendor\UdaStore.Module.Vendor.csproj", "{88C60CF1-2EEF-433A-AACD-2C1915D8F826}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UdaStore.Web", "src\UdaStore.Web\UdaStore.Web.csproj", "{0EC22F8F-C42C-4BB5-ACD8-3B266FBC6173}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{88C60CF1-2EEF-433A-AACD-2C1915D8F826}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88C60CF1-2EEF-433A-AACD-2C1915D8F826}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88C60CF1-2EEF-433A-AACD-2C1915D8F826}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EC22F8F-C42C-4BB5-ACD8-3B266FBC6173}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EC22F8F-C42C-4BB5-ACD8-3B266FBC6173}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EC22F8F-C42C-4BB5-ACD8-3B266FBC6173}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EC22F8F-C42C-4BB5-ACD8-3B266FBC6173}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -106,6 +112,7 @@ Global
 		{6E4429E9-FB8A-4F10-9A4E-AE5ED7A30A59} = {59300332-756E-4A75-98CE-D4CA10199CF0}
 		{B9CB2039-54FC-451C-BEEB-8A528BE3B160} = {59300332-756E-4A75-98CE-D4CA10199CF0}
 		{88C60CF1-2EEF-433A-AACD-2C1915D8F826} = {59300332-756E-4A75-98CE-D4CA10199CF0}
+		{0EC22F8F-C42C-4BB5-ACD8-3B266FBC6173} = {A5BD5EB6-F6D7-41C9-9183-B4D52A0B6C58}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {92FB8066-DB40-4B7F-86D5-6FA9E31462CE}

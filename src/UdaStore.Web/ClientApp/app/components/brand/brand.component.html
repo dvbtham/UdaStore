@@ -1,0 +1,75 @@
+<div class="row">
+  <div class="col-md-12">
+        <div class="box box-primary">
+            <div class="box-body">
+                    <p>
+                       <a routerLink="/brands/new" class="btn btn-primary">Thêm mới</a>
+                    </p>
+                    <p>
+                        <input 
+                            #query
+                            (keyup)="filter(query.value)"
+                            type="text" class="form-control" placeholder="Nhập từ khóa để tìm...">
+                     </p>
+                <data-table id="brands-grid"
+                headerTitle="Nhãn hiệu"
+                [items]="items"
+                [itemCount]="brandCount"
+                (reload)="reloadBrands($event)"
+        
+                [limit]="10"
+                [sortBy]="'rating'"
+                [sortAsc]="false"
+        
+                [selectColumn]="true"
+                [multiSelect]="true"
+                [substituteRows]="false"
+                [expandableRows]="true"
+                [translations]="translations"
+                [indexColumnHeader]="'#'"
+                [selectOnRowClick]="false"
+                >
+                <template #dataTableExpand let-item="item">
+                    <div [textContent]="item.description" style="padding: 5px; color: gray"></div>
+                </template>
+                <data-table-column
+                    [property]="'name'"
+                    [header]="'Tên'"
+                    [sortable]="true">
+                </data-table-column>
+                <data-table-column
+                    [property]="'isPublished'"
+                    [header]="'Công bố'"
+                    [sortable]="true">
+
+                    <ng-template #dataTableCell let-item="item">
+                        <i *ngIf="item.isPublished" class="fa fa-check-square text-success"></i>
+                        <i *ngIf="!item.isPublished" class="fa fa-check-square-o text-danger"></i>
+                     </ng-template>
+                </data-table-column>
+                <data-table-column
+                    [property]="'id'"  
+                    [header]="'Thao tác'"
+                >
+                    <ng-template #dataTableCell let-item="item">
+                        <a class="btn btn-info btn-xs" [routerLink]="['/brands/', item.id]">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <a class="btn btn-danger btn-xs" (click)="delete(item.id)">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </ng-template>
+                </data-table-column>
+            </data-table>
+            <div style="margin-top: 10px">
+                <b>Nhãn hiệu đã chọn: <i *ngIf="brandsTable.selectedRows.length > 0" class="btn btn-danger btn-xs">Xóa dòng đã chọn</i></b>
+                <span *ngIf="brandsTable.selectedRows.length === 0"><i>Chưa có nhãn hiệu nào được chọn</i></span>
+                
+                <div *ngFor="let selected of brandsTable.selectedRows">
+                    <span [textContent]="selected.item.name"></span>
+                </div>
+            </div>
+            </div>
+          </div>
+    </div>
+</div>
