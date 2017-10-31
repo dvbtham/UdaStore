@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductOptions } from '../../../../models/catalog/product-options';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProductOptionsService } from '../../../../services/catalog/product-options.service';
 import { ToastyService } from 'ng2-toasty';
+import { KeyValue } from '../../../../models/catalog/key-value';
 
 @Component({
   selector: 'app-product-options-form',
@@ -11,8 +11,7 @@ import { ToastyService } from 'ng2-toasty';
 })
 export class ProductOptionsFormComponent {
 
- 
-  productOption: ProductOptions = new ProductOptions();
+  productOption: KeyValue = new KeyValue();
   id: number;
 
   constructor(private router: Router, private toastyService: ToastyService,

@@ -2,7 +2,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using UdaStore.Infrastructure.Data;
 using UdaStore.Module.Catalog.Models;
-using UdaStore.Web.Core.Resources;
+using UdaStore.Module.Catalog.Resources;
 
 namespace UdaStore.Web.Controllers.CatalogControllers
 {

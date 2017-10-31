@@ -1,8 +1,6 @@
-export class Brand {
+import { KeyValue } from "./key-value";
 
-    id: number;    
-    
-    name: string;
+export class Brand extends KeyValue {
     
     seoTitle: string;
             

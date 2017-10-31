@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using UdaStore.Infrastructure;
-namespace UdaStore.Web.Core.Resources
+namespace UdaStore.Module.Catalog.Resources
 {
     public class BrandResource
     {

@@ -20,7 +20,6 @@ export class BrandComponent {
   @ViewChild(DataTable) brandsTable;
   constructor(private brandService: BrandService,
     private toastyService: ToastyService) {
-
     this.brandService.getAll().subscribe(brands => {
       this.brands = brands;
       this.initializeTable(brands);

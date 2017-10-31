@@ -1,4 +1,4 @@
-export class ProductOptions {
+export class KeyValue {
     id: number;
     name: string;
 }

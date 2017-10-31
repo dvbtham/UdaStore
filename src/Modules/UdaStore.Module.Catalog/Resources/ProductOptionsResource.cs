@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace UdaStore.Web.Core.Resources
+namespace UdaStore.Module.Catalog.Resources
 {
     public class ProductOptionsResource
     {

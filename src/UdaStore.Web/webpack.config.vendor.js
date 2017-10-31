@@ -23,6 +23,7 @@ const nonTreeShakableModules = [
     'ng2-toasty',
     'ng2-toasty/bundles/style.css',
     'jquery',
+    'jquery/dist/jquery.min.js'
 ];
 const allModules = treeShakableModules.concat(nonTreeShakableModules);
 

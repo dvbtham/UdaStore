@@ -24,6 +24,10 @@ import { BrandFormComponent } from './components/catalog/brand/brand-form/brand-
 import { BrandService } from './services/catalog/brand.service';
 import { ProductAttributeGroupFormComponent } from './components/catalog/product-attribute-group/product-attribute-group-form/product-attribute-group-form.component';
 import { ProductOptionsFormComponent } from './components/catalog/product-options/product-options-form/product-options-form.component';
+import { ProductAttributeFormComponent } from './components/catalog/product-attributes/product-attribute-form/product-attribute-form.component';
+import { ProductTemplatesFormComponent } from './components/catalog/product-templates/product-templates-form/product-templates-form.component';
+import { AppService } from './services/app-service';
+import { FormSelectComponent } from './directives/select.component';
 
 @NgModule({
     declarations: [
@@ -39,7 +43,10 @@ import { ProductOptionsFormComponent } from './components/catalog/product-option
         ProductAttributesComponent,
         ProductTemplatesComponent,
         ProductAttributeGroupFormComponent,
-        ProductOptionsFormComponent
+        ProductOptionsFormComponent,
+        ProductAttributeFormComponent,
+        ProductTemplatesFormComponent,
+        FormSelectComponent
     ],
     imports: [
         CommonModule,
@@ -55,14 +62,22 @@ import { ProductOptionsFormComponent } from './components/catalog/product-option
             { path: 'brands/new', component: BrandFormComponent },
             { path: 'brands/:id', component: BrandFormComponent },
 
-            
             { path: 'product-options', component: ProductOptionsComponent },
             { path: 'product-options/new', component: ProductOptionsFormComponent },
             { path: 'product-options/:id', component: ProductOptionsFormComponent },
 
+            { path: 'product-attributes', component: ProductAttributesComponent },
+            { path: 'product-attributes/new', component: ProductAttributeFormComponent },
+            { path: 'product-attributes/:id', component: ProductAttributeFormComponent },
+
             { path: 'product-attribute-group', component: ProductAttributeGroupComponent },
             { path: 'product-attribute-group/new', component: ProductAttributeGroupFormComponent },
             { path: 'product-attribute-group/:id', component: ProductAttributeGroupFormComponent },
+
+            { path: 'product-templates', component: ProductTemplatesComponent },
+            { path: 'product-templates/new', component: ProductTemplatesFormComponent },
+            { path: 'product-templates/:id', component: ProductTemplatesFormComponent },
+
 
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent },
@@ -70,6 +85,7 @@ import { ProductOptionsFormComponent } from './components/catalog/product-option
         ])
     ],
     providers: [
+        AppService,
         BrandService,
         ProductTemplatesService,
         ProductOptionsService,

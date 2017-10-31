@@ -1,31 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { ProductAttributeGroup } from '../../models/catalog/product-attribute-group';
+import { KeyValue } from '../../models/catalog/key-value';
+import { AppService } from '../app-service';
 
 @Injectable()
-export class ProductAttributeGroupService {
-  private readonly BASE_END_POINT = '/api/product-attribute-group';
-  constructor(private http: Http) { }
-
-  create(body: ProductAttributeGroup) {
-    return this.http.post(this.BASE_END_POINT, body).map(res => res.json());
+export class ProductAttributeGroupService extends AppService {
+  constructor(http: Http, private httpNew: Http) {
+    super(http);
+    this.BASE_END_POINT = "api/product-attribute-group"
   }
 
-  update(id: number, body: ProductAttributeGroup) {
-    return this.http.put(this.BASE_END_POINT + "/" + id, body).map(res => res.json());
-  }
-
-  delete(id: number) {
-    return this.http.delete(this.BASE_END_POINT + "/" + id).map(res => res.json());
-  }
-
-  getAll() {
-    return this.http.get(this.BASE_END_POINT).map(res => res.json());
-  }
-
-  get(id: number) {
-    return this.http.get(this.BASE_END_POINT + "/" + id, ).map(res => res.json());
+  getGroups() {
+    return this.httpNew.get(this.BASE_END_POINT + "/groups").map(x => x.json());
   }
 
 }

@@ -2,9 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using UdaStore.Infrastructure.Data;
 using UdaStore.Module.Catalog.Models;
-using UdaStore.Web.Core.Resources;
+using UdaStore.Module.Catalog.Resources;
 
 namespace UdaStore.Web.Controllers.CatalogControllers
 {
@@ -28,6 +29,15 @@ namespace UdaStore.Web.Controllers.CatalogControllers
                 .Query().ToList();
             var result = _mapper.Map<List<ProductAttributeGroup>, List<ProductAttributeGroupResource>>(attributeGroups);
             return Json(result);
+        }
+
+        [HttpGet("groups")]
+        public IActionResult GetGroups()
+        {
+            var attributeGroups = _productAttrGroupRepository
+                .Query().Include(x => x.Attributes).ToList();
+
+            return Ok(attributeGroups);
         }
 
         [HttpGet("{id}")]

@@ -2,29 +2,12 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Brand } from '../../models/catalog/brand';
+import { AppService } from '../app-service';
 
 @Injectable()
-export class BrandService {
-  private readonly BASE_END_POINT = '/api/brands';
-  constructor(private http: Http) { }
-
-  getAll() {
-    return this.http.get(this.BASE_END_POINT).map(brands => brands.json());
+export class BrandService extends AppService {
+  constructor(http: Http) {
+    super(http);
+    this.BASE_END_POINT = "api/brands"
   }
-
-  create(brand: any) {
-    return this.http.post(this.BASE_END_POINT, brand).map(brand => brand.json());
-  }
-  getBrand(id: number) {
-    return this.http.get(`${this.BASE_END_POINT}/${id}`).map(brand => brand.json());
-  }
-
-  update(id: number, brand: Brand) {
-    return this.http.put(`${this.BASE_END_POINT}/${id}`, brand).map(brand => brand.json());
-  }
-
-  delete(id: number){
-    return this.http.delete(this.BASE_END_POINT + "/"+ id).map(brand => brand.json());
-  }
-
 }

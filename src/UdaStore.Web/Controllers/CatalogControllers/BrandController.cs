@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using UdaStore.Infrastructure;
 using UdaStore.Infrastructure.Data;
 using UdaStore.Module.Catalog.Models;
+using UdaStore.Module.Catalog.Resources;
 using UdaStore.Module.Catalog.Services;
-using UdaStore.Web.Core.Resources;
 
 namespace UdaStore.Web.Controllers.CatalogControllers
 {

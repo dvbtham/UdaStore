@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { ProductAttributeGroup } from '../../../../models/catalog/product-attribute-group';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProductAttributeGroupService } from '../../../../services/catalog/product-attribute-group.service';
 import { ToastyService } from 'ng2-toasty';
+import { KeyValue } from '../../../../models/catalog/key-value';
 
 @Component({
   selector: 'app-product-attribute-group-form',
@@ -11,7 +11,7 @@ import { ToastyService } from 'ng2-toasty';
 })
 export class ProductAttributeGroupFormComponent {
 
-  atrributeGroup: ProductAttributeGroup = new ProductAttributeGroup();
+  atrributeGroup: KeyValue = new KeyValue();
   id: number;
 
   constructor(private router: Router, private toastyService: ToastyService,

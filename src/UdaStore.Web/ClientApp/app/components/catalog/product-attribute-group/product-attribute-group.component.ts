@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableTranslations, DataTableResource, DataTable } from 'data-table-angular-4-bootstrap-3/src';
 import { ToastyService } from 'ng2-toasty';
-import { ProductAttributeGroup } from '../../../models/catalog/product-attribute-group';
 import { ProductAttributeGroupService } from '../../../services/catalog/product-attribute-group.service';
+import { KeyValue } from '../../../models/catalog/key-value';
 
 @Component({
   selector: 'app-product-attribute-group',
@@ -11,10 +11,10 @@ import { ProductAttributeGroupService } from '../../../services/catalog/product-
 })
 export class ProductAttributeGroupComponent {
 
-  atrributeGroups: ProductAttributeGroup[] = [];
+  atrributeGroups: KeyValue[] = [];
   tableResource = new DataTableResource(this.atrributeGroups);
   itemCount = 0;
-  items: ProductAttributeGroup[] = [];
+  items: KeyValue[] = [];
 
   @ViewChild(DataTable) table;
   constructor(private attributeGroupService: ProductAttributeGroupService,
@@ -27,7 +27,7 @@ export class ProductAttributeGroupComponent {
 
   }
 
-  private initializeTable(atrributeGroup: ProductAttributeGroup[]) {
+  private initializeTable(atrributeGroup: KeyValue[]) {
     this.tableResource = new DataTableResource(atrributeGroup);
 
     this.tableResource.query({ offset: 0 })

@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ProductOptions } from '../../../models/catalog/product-options';
 import { DataTableResource, DataTableTranslations, DataTable } from 'data-table-angular-4-bootstrap-3/src';
 import { ProductOptionsService } from '../../../services/catalog/product-options.service';
 import { ToastyService } from 'ng2-toasty';
+import { KeyValue } from '../../../models/catalog/key-value';
 
 @Component({
   selector: 'app-product-options',
@@ -11,10 +11,10 @@ import { ToastyService } from 'ng2-toasty';
 })
 export class ProductOptionsComponent {
 
-  productOptions: ProductOptions[] = [];
+  productOptions: KeyValue[] = [];
   tableResource = new DataTableResource(this.productOptions);
   itemCount = 0;
-  items: ProductOptions[] = [];
+  items: KeyValue[] = [];
 
   @ViewChild(DataTable) table;
   constructor(private attributeGroupService: ProductOptionsService,
@@ -27,7 +27,7 @@ export class ProductOptionsComponent {
 
   }
 
-  private initializeTable(atrributeGroup: ProductOptions[]) {
+  private initializeTable(atrributeGroup: KeyValue[]) {
     this.tableResource = new DataTableResource(atrributeGroup);
 
     this.tableResource.query({ offset: 0 })

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using UdaStore.Module.Catalog.Models;
-using UdaStore.Web.Core.Resources;
 using UdaStore.Infrastructure;
+using UdaStore.Module.Catalog.Resources;
 
 namespace UdaStore.Web.Mapping
 {
@@ -17,6 +17,7 @@ namespace UdaStore.Web.Mapping
         {
             CreateMap<Brand, BrandResource>();
             CreateMap<ProductAttributeGroup, ProductAttributeGroupResource>();
+            CreateMap<ProductTemplate, ProductTemplateResource>();
         }
         private void ResourceToDomain()
         {

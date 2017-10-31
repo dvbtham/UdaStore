@@ -1,0 +1,43 @@
+<form #f="ngForm" (ngSubmit)="save(f.value)">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">Thông tin Mẫu sản phẩm</h3>
+        </div>
+        <div class="box-body">
+          <div class="form-group">
+            <label for="name">Tên</label>
+            <input type="text" required #name="ngModel" class="form-control" name="name" id="name" [(ngModel)]="productTemplate.name"
+              placeholder="Nhập tên">
+
+            <div class="alert alert-danger" *ngIf="name.touched && name.invalid">
+              Tên là bắt buộc.
+            </div>
+          </div>
+          <div class="form-group">
+              <label for="name">Đặc tính khả dụng</label>
+            <select #attribute class="form-control" (change)="selectAttribute(attribute.value)" id="attribute">
+              <option value=""></option>
+              <optgroup [class.hide]="item.attributes.length === 0" *ngFor="let item of groups" label="{{ item.name }}">
+                <option *ngFor="let a of item.attributes" value="{{ a.id }}">{{ a.name }}</option>
+              </optgroup>
+            </select>
+          </div>
+          <p *ngIf="addedAttributes.length > 0" class="text-primary">Các đặc tính đã thêm:</p>
+          <ul>
+            <li *ngFor="let added of addedAttributes">
+              {{ added.name }}
+              <i title="Xóa" (click)="deleteAttribute(added.id)" style="cursor: pointer;color:red; margin-left: 30px;" class="fa fa-times"></i>
+            </li>
+          </ul>
+         
+        </div>
+        <div class="box-footer">
+          <button class="btn btn-primary" type="submit" [disabled]="!f.valid">Lưu lại</button>
+          <a class="btn btn-danger" [routerLink]="['/product-templates']">Hủy</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

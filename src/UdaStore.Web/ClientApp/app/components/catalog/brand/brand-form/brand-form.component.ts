@@ -19,7 +19,7 @@ export class BrandFormComponent {
   constructor(private router: Router, private toastyService: ToastyService,
     private route: ActivatedRoute, private brandService: BrandService) {
     this.id = +this.route.snapshot.paramMap.get('id');
-    if (this.id) this.brandService.getBrand(this.id).subscribe(brand => this.brand = brand);
+    if (this.id) this.brandService.get(this.id).subscribe(brand => this.brand = brand);
   }
 
   save(brand) {
