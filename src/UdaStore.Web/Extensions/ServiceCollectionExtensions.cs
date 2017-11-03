@@ -7,23 +7,31 @@ using System.Runtime.Loader;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UdaStore.Infrastructure;
 using UdaStore.Infrastructure.Data;
 using UdaStore.Infrastructure.Web.ModelBinders;
 using UdaStore.Module.Core.Data;
+using UdaStore.Module.Core.Extensions;
+using UdaStore.Module.Core.Models;
+using UdaStore.Module.Core.Persistence;
 
 namespace UdaStore.Web.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection LoadInstalledModules(this IServiceCollection services,
-            IList<ModuleInfo> modules, IHostingEnvironment hostingEnvironment)
+        public static IServiceCollection LoadInstalledModules(this IServiceCollection services, string contentRootPath)
         {
-            var moduleRootFolder = new DirectoryInfo(Path.Combine(hostingEnvironment.ContentRootPath, "Modules"));
+            var modules = new List<ModuleInfo>();
+            var moduleRootFolder = new DirectoryInfo(Path.Combine(contentRootPath, "Modules"));
             var moduleFolders = moduleRootFolder.GetDirectories();
 
             foreach (var moduleFolder in moduleFolders)
@@ -99,6 +107,29 @@ namespace UdaStore.Web.Extensions
                 }
             }
 
+            return services;
+        }
+
+        public static IServiceCollection AddCustomizedIdentity(this IServiceCollection services)
+        {
+            services
+                .AddIdentity<User, Role>()
+                .AddRoleStore<UdaRoleStore>()
+                .AddUserStore<UdaUserStore>()
+                .AddDefaultTokenProviders();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(o => o.LoginPath = new PathString("/login"));
+
+            services.ConfigureApplicationCookie(x => x.LoginPath = new PathString("/login"));
+            return services;
+        }
+
+        public static IServiceCollection AddCustomizedDataStore(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddDbContext<UdaStoreDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                    b => b.MigrationsAssembly("UdaStore.Web")));
             return services;
         }
 

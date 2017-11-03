@@ -11,6 +11,7 @@ import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
 import { CounterComponent } from './components/counter/counter.component';
 import { DataTableModule } from 'data-table-angular-4-bootstrap-3/src/index';
 import { ToastyModule } from 'ng2-toasty';
+import { NgUploaderModule } from 'ngx-uploader';
 import { ProductOptionsComponent } from './components/catalog/product-options/product-options.component';
 import { ProductAttributeGroupComponent } from './components/catalog/product-attribute-group/product-attribute-group.component';
 import { ProductAttributesComponent } from './components/catalog/product-attributes/product-attributes.component';
@@ -28,6 +29,12 @@ import { ProductAttributeFormComponent } from './components/catalog/product-attr
 import { ProductTemplatesFormComponent } from './components/catalog/product-templates/product-templates-form/product-templates-form.component';
 import { AppService } from './services/app-service';
 import { FormSelectComponent } from './directives/select.component';
+import { CategoryComponent } from './components/catalog/category/category.component';
+import { CategoryFormComponent } from './components/catalog/category/category-form/category-form.component';
+import { CategoryService } from './services/catalog/category.service';
+import { ProductComponent } from './components/catalog/product/product.component';
+import { ProductFormComponent } from './components/catalog/product/product-form/product-form.component';
+import { ProductService } from './services/catalog/product.service';
 
 @NgModule({
     declarations: [
@@ -46,13 +53,18 @@ import { FormSelectComponent } from './directives/select.component';
         ProductOptionsFormComponent,
         ProductAttributeFormComponent,
         ProductTemplatesFormComponent,
-        FormSelectComponent
+        FormSelectComponent,
+        CategoryComponent,
+        CategoryFormComponent,
+        ProductComponent,
+        ProductFormComponent
     ],
     imports: [
         CommonModule,
         HttpModule,
         FormsModule,
         DataTableModule,
+        NgUploaderModule,
         ToastyModule.forRoot(),
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -61,6 +73,15 @@ import { FormSelectComponent } from './directives/select.component';
             { path: 'brands', component: BrandComponent },
             { path: 'brands/new', component: BrandFormComponent },
             { path: 'brands/:id', component: BrandFormComponent },
+
+            { path: 'categories', component: CategoryComponent },
+            { path: 'categories/new', component: CategoryFormComponent },
+            { path: 'categories/:id', component: CategoryFormComponent },
+
+            { path: 'products', component: ProductComponent },
+            { path: 'products/new', component: ProductFormComponent },
+            { path: 'products/:id', component: ProductFormComponent },
+
 
             { path: 'product-options', component: ProductOptionsComponent },
             { path: 'product-options/new', component: ProductOptionsFormComponent },
@@ -87,8 +108,10 @@ import { FormSelectComponent } from './directives/select.component';
     providers: [
         AppService,
         BrandService,
+        CategoryService,
         ProductTemplatesService,
         ProductOptionsService,
+        ProductService,
         ProductAttributesService,
         ProductAttributeGroupService
     ]

@@ -1,16 +1,50 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using UdaStore.Infrastructure.Data;
 using UdaStore.Module.Core.Models;
 
 namespace UdaStore.Module.Core.Data
 {
-   public class CoreCustomModelBuilder : ICustomModelBuilder
+    public class CoreCustomModelBuilder : ICustomModelBuilder
     {
         public void Build(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
                 .ToTable("Core_User");
-           
+
+            modelBuilder.Entity<Role>()
+                .ToTable("Core_Role");
+
+            modelBuilder.Entity<IdentityUserClaim<long>>(b =>
+            {
+                b.HasKey(uc => uc.Id);
+                b.ToTable("Core_UserClaim");
+            });
+
+            modelBuilder.Entity<IdentityRoleClaim<long>>(b =>
+            {
+                b.HasKey(rc => rc.Id);
+                b.ToTable("Core_RoleClaim");
+            });
+
+            modelBuilder.Entity<UserRole>(b =>
+            {
+                b.HasKey(ur => new { ur.UserId, ur.RoleId });
+                b.HasOne(ur => ur.Role).WithMany(x => x.Users).HasForeignKey(r => r.RoleId);
+                b.HasOne(ur => ur.User).WithMany(x => x.Roles).HasForeignKey(u => u.UserId);
+                b.ToTable("Core_UserRole");
+            });
+
+            modelBuilder.Entity<IdentityUserLogin<long>>(b =>
+            {
+                b.ToTable("Core_UserLogin");
+            });
+
+            modelBuilder.Entity<IdentityUserToken<long>>(b =>
+            {
+                b.ToTable("Core_UserToken");
+            });
+
             modelBuilder.Entity<Entity>(e =>
             {
                 e.HasKey(x => x.Id);
@@ -20,17 +54,14 @@ namespace UdaStore.Module.Core.Data
             modelBuilder.Entity<User>(u =>
             {
                 u.HasOne(x => x.DefaultShippingAddress)
-               .WithMany()
-               .HasForeignKey(x => x.DefaultShippingAddressId)
-               .OnDelete(DeleteBehavior.Restrict);
-            });
+                   .WithMany()
+                   .HasForeignKey(x => x.DefaultShippingAddressId)
+                   .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<User>(u =>
-            {
                 u.HasOne(x => x.DefaultBillingAddress)
-               .WithMany()
-               .HasForeignKey(x => x.DefaultBillingAddressId)
-               .OnDelete(DeleteBehavior.Restrict);
+                    .WithMany()
+                    .HasForeignKey(x => x.DefaultBillingAddressId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<UserAddress>()
@@ -53,6 +84,7 @@ namespace UdaStore.Module.Core.Data
                     .WithMany()
                     .OnDelete(DeleteBehavior.Restrict);
             });
+
         }
     }
 }

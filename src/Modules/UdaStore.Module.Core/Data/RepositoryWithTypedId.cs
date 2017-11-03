@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using UdaStore.Infrastructure.Data;
@@ -32,6 +33,11 @@ namespace UdaStore.Module.Core.Data
         public void SaveChange()
         {
             Context.SaveChanges();
+        }
+
+        public Task SaveChangesAsync()
+        {
+            return Context.SaveChangesAsync();
         }
 
         public IQueryable<T> Query()

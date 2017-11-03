@@ -1,0 +1,109 @@
+<div class="row">
+    <div class="col-md-12">
+      <div class="box box-primary">
+        <div class="box-header">
+          <h3 class="box-title">Quản lý Danh mục sản phẩm</h3>
+        </div>
+       <div class="box-body">
+          <div class="nav-tabs-custom">
+              <ul class="nav nav-tabs">
+                <li class="active"><a href="#category" data-toggle="tab">Danh mục sản phẩm</a></li>
+                <li class=""><a href="#products" data-toggle="tab">Sản phẩm</a></li>
+              </ul>
+              <div class="tab-content">  
+                <div class="tab-pane active fade in" id="category">
+                  <form #f="ngForm" (ngSubmit)="save()" class="form-horizontal">
+                    <div class="form-group">
+                      <label for="name" class="col-sm-2 control-label">Tên danh mục</label>
+                        <div class="col-md-6">
+                          <input type="text" name="name" #name="ngModel"
+                                [(ngModel)]="category.name" required maxlength="256"
+                                class="form-control" id="name" 
+                                placeholder="Tên danh mục">
+                          <div class="alert alert-danger" *ngIf="name.touched && name.invalid">
+                              <div *ngIf="name.errors.required">
+                                  Vui lòng nhập Tên danh mục.
+                              </div>
+                              <div *ngIf="name.errors.maxlength">
+                                  Tên danh mục không quá 256 ký tự.
+                              </div>
+                          </div>  
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="category.id">
+                      <label for="image" class="col-sm-2 control-label">Hình ảnh</label>
+                        <div class="col-md-6">
+                        <input type="file" (change)="changeFile()" #fileInput accept="image/*" class="form-control">
+                        <button type="button" style="margin-top: 5px" [disabled]="!category.thumbnailImage" (click)="uploadPhoto()" class="btn btn-success">Lưu ảnh</button>
+                        <small style="font-style: italic; padding-left: 10px;" 
+                        class="text-danger"><i class="fa fa-warning"></i> 
+                        Nếu bạn không nhấn vào nút Lưu ảnh, ảnh bạn đã chọn sẽ không được lưu.
+                      </small>
+                        <div style="margin-top: 5px">
+                            <img [src]="category.thumbnailImageUrl" width="100" *ngIf="category.thumbnailImageUrl">
+                        </div>
+                        
+                      </div>
+                    </div>
+                   
+                    <div class="form-group">
+                      <label for="parent" class="col-sm-2 control-label">Danh mục cha</label>
+                        <div class="col-md-6">
+                        <select name="parentId" [(ngModel)]="category.parentId" id="parent" class="form-control">
+                          <option value=""></option>
+                          <option *ngFor="let c of categories" [value]="c.id">{{ c.name }}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="description" class="col-sm-2 control-label">Mô tả</label>
+                        <div class="col-md-6">
+                        <textarea class="form-control" name="description" [(ngModel)]="category.description" id="description" placeholder="Mô tả"></textarea>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="order" class="col-sm-2 control-label">Thứ tự hiển thị</label>
+                        <div class="col-md-6">
+                        <input type="number" name="displayOrder" [(ngModel)]="category.displayOrder" class="form-control" id="order" placeholder="Thứ tự hiển thị">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-sm-offset-2 col-md-6">
+                        <div class="checkbox">
+                          <label>
+                            <input [checked]="category.pinToMenu" [(ngModel)]="category.pinToMenu" name="pinToTop" type="checkbox"> Ghim vào menu
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-sm-offset-2 col-md-6">
+                        <div class="checkbox">
+                          <label>
+                            <input [checked]="category.isPublished" [(ngModel)]="category.isPublished" name="isPublished" type="checkbox"> Công bố
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group">
+                      <div class="col-sm-offset-2 col-md-6">
+                        <button type="submit" [disabled]="!f.valid" class="btn btn-primary">Lưu lại</button>
+                        <a [routerLink]="['/categories']" class="btn btn-danger">Hủy</a>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <!-- /.tab-pane -->
+                <div class="tab-pane fade" id="products">
+                  
+                </div>
+                 <!-- /.tab-pane -->
+              </div>
+              <!-- /.tab-content -->
+            </div>
+       </div>
+      </div>
+       
+      </div>
+</div>

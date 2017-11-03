@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using UdaStore.Infrastructure;
@@ -11,7 +12,7 @@ using UdaStore.Module.Core.Models;
 
 namespace UdaStore.Module.Core.Persistence
 {
-    public class UdaStoreDbContext : IdentityDbContext<User>
+    public class UdaStoreDbContext : IdentityDbContext<User, Role, long, IdentityUserClaim<long>, UserRole, IdentityUserLogin<long>, IdentityRoleClaim<long>, IdentityUserToken<long>>
     {
         public UdaStoreDbContext(DbContextOptions<UdaStoreDbContext> options)
             : base(options)

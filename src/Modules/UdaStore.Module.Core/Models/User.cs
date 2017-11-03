@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
+using UdaStore.Infrastructure.Models;
 
 namespace UdaStore.Module.Core.Models
 {
-    public class User : IdentityUser
+    public class User : IdentityUser<long>, IEntityWithTypedId<long>
     {
         public Guid UserGuid { get; set; }
 
@@ -30,7 +31,8 @@ namespace UdaStore.Module.Core.Models
 
         [InverseProperty("User")]
         public ICollection<UserAddress> UserAddresses { get; set; }
-
+        public IList<UserRole> Roles { get; set; } =  new List<UserRole>();
+        
         public User()
         {
             CreatedOn = DateTimeOffset.Now;

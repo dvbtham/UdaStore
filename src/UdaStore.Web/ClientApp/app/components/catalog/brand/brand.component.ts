@@ -1,56 +1,37 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { DataTableTranslations, DataTable, DataTableResource } from 'data-table-angular-4-bootstrap-3/src';
+import { Component } from '@angular/core';
 import { ToastyService } from 'ng2-toasty';
 import { Router } from '@angular/router';
 import { BrandService } from '../../../services/catalog/brand.service';
 import { Brand } from '../../../models/catalog/brand';
+import { DataTableBase } from '../../../data-table';
 
 @Component({
   selector: 'app-brand',
   templateUrl: './brand.component.html',
   styleUrls: ['./brand.component.css']
 })
-export class BrandComponent {
+export class BrandComponent extends DataTableBase {
 
   brands: Brand[] = [];
-  brandResource = new DataTableResource(this.brands);
-  brandCount = 0;
-  items: Brand[] = [];
 
-  @ViewChild(DataTable) brandsTable;
   constructor(private brandService: BrandService,
-    private toastyService: ToastyService) {
-    this.brandService.getAll().subscribe(brands => {
-      this.brands = brands;
-      this.initializeTable(brands);
+    private toastyService: ToastyService, ) {
+    super();
+    this.brandService.getAll().subscribe(items => {
+      this.brands = items;
+      this.initializeTable(items);
     });
 
   }
 
-  private initializeTable(brands: Brand[]) {
-    this.brandResource = new DataTableResource(brands);
-
-    this.brandResource.query({ offset: 0 })
-      .then(items => this.items = items);
-
-    this.brandResource.count().then(count => this.brandCount = count);
-  }
-
   filter(query: string) {
-    let filteredBrands = (query) ?
+    let filtered = (query) ?
       this.brands.filter(p => p.name.toLowerCase().includes(query.toLowerCase())) :
       this.brands;
 
-    this.initializeTable(filteredBrands);
+    this.initializeTable(filtered);
   }
 
-  reloadBrands(params) {
-    this.brandResource.query(params).then(items => this.items = items);
-  }
-
-  cellColor(car) {
-    return 'rgb(255, 255,' + (155 + Math.floor(100 - ((car.rating - 8.7) / 1.3) * 100)) + ')';
-  };
 
   isPublishedToggle(id: number) {
     const brand = this.brands.find(x => x.id === id);
@@ -74,12 +55,4 @@ export class BrandComponent {
 
   }
 
-
-  translations = <DataTableTranslations>{
-    indexColumn: 'Thứ tự',
-    expandColumn: 'Mô tả',
-    selectColumn: 'Ô chọn',
-    paginationLimit: 'Tối đa',
-    paginationRange: 'Kết quả'
-  };
 }

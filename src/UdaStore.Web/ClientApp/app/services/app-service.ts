@@ -1,5 +1,6 @@
 import { Http } from "@angular/http";
 import { Injectable } from "@angular/core";
+import { ToastyService } from "ng2-toasty";
 
 @Injectable()
 export class AppService {
@@ -27,3 +28,26 @@ export class AppService {
         return this.http.delete(this.BASE_END_POINT + "/" + id).map(result => result.json());
     }
 }
+
+export var SaveSuccesMessage = {
+    title: 'Thành công',
+    msg: 'Dữ liệu đã được lưu.',
+    theme: 'material',
+    timeout: 5000,
+    showClose: true
+}
+export var SaveErrorMessage = {
+    title: 'Lỗi',
+    msg: 'Lưu thất bại vì lý do không xác định',
+    theme: 'material',
+    timeout: 5000,
+    showClose: true
+  }
+
+export var DeleteSuccessMessage = {
+    title: 'Xóa thành công',
+    msg: 'Dữ liệu đã được xóa.',
+    theme: 'material',
+    timeout: 5000,
+    showClose: true
+  }

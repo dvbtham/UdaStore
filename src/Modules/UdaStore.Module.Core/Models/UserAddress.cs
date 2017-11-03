@@ -6,7 +6,7 @@ namespace UdaStore.Module.Core.Models
 {
     public class UserAddress : EntityBase
     {
-        public string UserId { get; set; }
+        public long UserId { get; set; }
 
         public User User { get; set; }
 

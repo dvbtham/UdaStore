@@ -16,6 +16,8 @@ namespace UdaStore.Module.Catalog.Models
 
         public int DisplayOrder { get; set; }
 
+        public bool PinToMenu { get; set; }
+
         public bool IsPublished { get; set; }
 
         public bool IsDeleted { get; set; }

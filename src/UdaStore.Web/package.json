@@ -39,6 +39,7 @@
     "jquery": "3.2.1",
     "json-loader": "0.5.4",
     "ng2-toasty": "^4.0.3",
+    "ngx-uploader": "^4.0.2",
     "preboot": "4.5.2",
     "raw-loader": "0.5.1",
     "reflect-metadata": "0.1.10",

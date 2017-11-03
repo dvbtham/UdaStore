@@ -3,47 +3,29 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage.Internal;
+using SimplCommerce.Module.Core.Models;
 using System;
+using UdaStore.Module.Catalog.Models;
+using UdaStore.Module.Core.Models;
 using UdaStore.Module.Core.Persistence;
+using UdaStore.Module.Orders.Models;
+using UdaStore.Module.Reviews.Models;
 
-namespace UdaStore.Module.Core.Migrations
+namespace UdaStore.Web.Migrations
 {
     [DbContext(typeof(UdaStoreDbContext))]
-    [Migration("20171026160049_InitialDb")]
-    partial class InitialDb
+    partial class UdaStoreDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -52,17 +34,16 @@ namespace UdaStore.Module.Core.Migrations
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired();
+                    b.Property<long>("RoleId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims");
+                    b.ToTable("Core_RoleClaim");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<long>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -71,17 +52,16 @@ namespace UdaStore.Module.Core.Migrations
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<long>("UserId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims");
+                    b.ToTable("Core_UserClaim");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<long>", b =>
                 {
                     b.Property<string>("LoginProvider");
 
@@ -89,32 +69,18 @@ namespace UdaStore.Module.Core.Migrations
 
                     b.Property<string>("ProviderDisplayName");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<long>("UserId");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins");
+                    b.ToTable("Core_UserLogin");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
                 {
-                    b.Property<string>("UserId");
-
-                    b.Property<string>("RoleId");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.Property<string>("UserId");
+                    b.Property<long>("UserId");
 
                     b.Property<string>("LoginProvider");
 
@@ -124,7 +90,7 @@ namespace UdaStore.Module.Core.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens");
+                    b.ToTable("Core_UserToken");
                 });
 
             modelBuilder.Entity("UdaStore.Module.ActivityLog.Models.Activity", b =>
@@ -198,6 +164,8 @@ namespace UdaStore.Module.Core.Migrations
 
                     b.Property<long?>("ParentId");
 
+                    b.Property<bool>("PinToMenu");
+
                     b.Property<string>("SeoTitle");
 
                     b.Property<long?>("ThumbnailImageId");
@@ -218,7 +186,7 @@ namespace UdaStore.Module.Core.Migrations
 
                     b.Property<long?>("BrandId");
 
-                    b.Property<string>("CreatedById");
+                    b.Property<long?>("CreatedById");
 
                     b.Property<DateTimeOffset>("CreatedOn");
 
@@ -278,7 +246,7 @@ namespace UdaStore.Module.Core.Migrations
 
                     b.Property<long?>("ThumbnailImageId");
 
-                    b.Property<string>("UpdatedById");
+                    b.Property<long?>("UpdatedById");
 
                     b.Property<DateTimeOffset>("UpdatedOn");
 
@@ -496,7 +464,7 @@ namespace UdaStore.Module.Core.Migrations
 
                     b.Property<string>("Body");
 
-                    b.Property<string>("CreatedById");
+                    b.Property<long?>("CreatedById");
 
                     b.Property<DateTimeOffset>("CreatedOn");
 
@@ -516,7 +484,7 @@ namespace UdaStore.Module.Core.Migrations
 
                     b.Property<string>("SeoTitle");
 
-                    b.Property<string>("UpdatedById");
+                    b.Property<long?>("UpdatedById");
 
                     b.Property<DateTimeOffset>("UpdatedOn");
 
@@ -659,6 +627,30 @@ namespace UdaStore.Module.Core.Migrations
                     b.ToTable("Core_Media");
                 });
 
+            modelBuilder.Entity("UdaStore.Module.Core.Models.Role", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("Core_Role");
+                });
+
             modelBuilder.Entity("UdaStore.Module.Core.Models.StateOrProvince", b =>
                 {
                     b.Property<long>("Id")
@@ -679,7 +671,7 @@ namespace UdaStore.Module.Core.Migrations
 
             modelBuilder.Entity("UdaStore.Module.Core.Models.User", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("AccessFailedCount");
@@ -761,7 +753,7 @@ namespace UdaStore.Module.Core.Migrations
 
                     b.Property<DateTimeOffset?>("LastUsedOn");
 
-                    b.Property<string>("UserId");
+                    b.Property<long>("UserId");
 
                     b.HasKey("Id");
 
@@ -770,6 +762,19 @@ namespace UdaStore.Module.Core.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Core_UserAddress");
+                });
+
+            modelBuilder.Entity("UdaStore.Module.Core.Models.UserRole", b =>
+                {
+                    b.Property<long>("UserId");
+
+                    b.Property<long>("RoleId");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("Core_UserRole");
                 });
 
             modelBuilder.Entity("UdaStore.Module.Core.Models.Widget", b =>
@@ -887,13 +892,11 @@ namespace UdaStore.Module.Core.Migrations
 
                     b.Property<long>("UserId");
 
-                    b.Property<string>("UserId1");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Orders_CartItem");
                 });
@@ -906,8 +909,6 @@ namespace UdaStore.Module.Core.Migrations
                     b.Property<long>("BillingAddressId");
 
                     b.Property<long>("CreatedById");
-
-                    b.Property<string>("CreatedById1");
 
                     b.Property<DateTimeOffset>("CreatedOn");
 
@@ -927,7 +928,7 @@ namespace UdaStore.Module.Core.Migrations
 
                     b.HasIndex("BillingAddressId");
 
-                    b.HasIndex("CreatedById1");
+                    b.HasIndex("CreatedById");
 
                     b.HasIndex("ParentId");
 
@@ -1011,11 +1012,9 @@ namespace UdaStore.Module.Core.Migrations
 
                     b.Property<long>("UserId");
 
-                    b.Property<string>("UserId1");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Reviews_Review");
                 });
@@ -1062,15 +1061,15 @@ namespace UdaStore.Module.Core.Migrations
                     b.ToTable("Vendor_Vendor");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                    b.HasOne("UdaStore.Module.Core.Models.Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<long>", b =>
                 {
                     b.HasOne("UdaStore.Module.Core.Models.User")
                         .WithMany()
@@ -1078,7 +1077,7 @@ namespace UdaStore.Module.Core.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<long>", b =>
                 {
                     b.HasOne("UdaStore.Module.Core.Models.User")
                         .WithMany()
@@ -1086,20 +1085,7 @@ namespace UdaStore.Module.Core.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("UdaStore.Module.Core.Models.User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
                 {
                     b.HasOne("UdaStore.Module.Core.Models.User")
                         .WithMany()
@@ -1327,6 +1313,19 @@ namespace UdaStore.Module.Core.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("UdaStore.Module.Core.Models.UserRole", b =>
+                {
+                    b.HasOne("UdaStore.Module.Core.Models.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("UdaStore.Module.Core.Models.User", "User")
+                        .WithMany("Roles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("UdaStore.Module.Core.Models.WidgetInstance", b =>
                 {
                     b.HasOne("UdaStore.Module.Core.Models.Widget", "Widget")
@@ -1356,7 +1355,8 @@ namespace UdaStore.Module.Core.Migrations
 
                     b.HasOne("UdaStore.Module.Core.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("UdaStore.Module.Orders.Models.Order", b =>
@@ -1368,7 +1368,8 @@ namespace UdaStore.Module.Core.Migrations
 
                     b.HasOne("UdaStore.Module.Core.Models.User", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedById1");
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("UdaStore.Module.Orders.Models.Order", "Parent")
                         .WithMany("Children")
@@ -1414,7 +1415,8 @@ namespace UdaStore.Module.Core.Migrations
                 {
                     b.HasOne("UdaStore.Module.Core.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

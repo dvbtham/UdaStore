@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
 
-namespace UdaStore.Module.Core.Migrations
+namespace UdaStore.Web.Migrations
 {
     public partial class InitialDb : Migration
     {
@@ -20,20 +20,6 @@ namespace UdaStore.Module.Core.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ActivityLog_ActivityType", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetRoles",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -151,6 +137,21 @@ namespace UdaStore.Module.Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Core_Role",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Core_Role", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Core_Widget",
                 columns: table => new
                 {
@@ -254,27 +255,6 @@ namespace UdaStore.Module.Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetRoleClaims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Catalog_ProductAttribute",
                 columns: table => new
                 {
@@ -349,6 +329,7 @@ namespace UdaStore.Module.Core.Migrations
                     IsPublished = table.Column<bool>(type: "bit", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ParentId = table.Column<long>(type: "bigint", nullable: true),
+                    PinToMenu = table.Column<bool>(type: "bit", nullable: false),
                     SeoTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ThumbnailImageId = table.Column<long>(type: "bigint", nullable: true)
                 },
@@ -367,6 +348,27 @@ namespace UdaStore.Module.Core.Migrations
                         principalTable: "Core_Media",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Core_RoleClaim",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RoleId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Core_RoleClaim", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Core_RoleClaim_Core_Role_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Core_Role",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -545,31 +547,13 @@ namespace UdaStore.Module.Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserRoles",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Catalog_Product",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     BrandId = table.Column<long>(type: "bigint", nullable: true),
-                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedById = table.Column<long>(type: "bigint", nullable: true),
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DisplayOrder = table.Column<int>(type: "int", nullable: false),
@@ -599,7 +583,7 @@ namespace UdaStore.Module.Core.Migrations
                     Specification = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StockQuantity = table.Column<int>(type: "int", nullable: true),
                     ThumbnailImageId = table.Column<long>(type: "bigint", nullable: true),
-                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedById = table.Column<long>(type: "bigint", nullable: true),
                     UpdatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     VendorId = table.Column<long>(type: "bigint", nullable: true)
                 },
@@ -794,8 +778,7 @@ namespace UdaStore.Module.Core.Migrations
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ProductId = table.Column<long>(type: "bigint", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -839,7 +822,7 @@ namespace UdaStore.Module.Core.Migrations
                     AddressId = table.Column<long>(type: "bigint", nullable: false),
                     AddressType = table.Column<int>(type: "int", nullable: false),
                     LastUsedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -856,7 +839,8 @@ namespace UdaStore.Module.Core.Migrations
                 name: "Core_User",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AccessFailedCount = table.Column<int>(type: "int", nullable: false),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
@@ -904,74 +888,13 @@ namespace UdaStore.Module.Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserClaims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserClaims_Core_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Core_User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserLogins",
-                columns: table => new
-                {
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserLogins_Core_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Core_User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserTokens",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserTokens_Core_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Core_User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Cms_Page",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Body = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedById = table.Column<long>(type: "bigint", nullable: true),
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     IsPublished = table.Column<bool>(type: "bit", nullable: false),
@@ -981,7 +904,7 @@ namespace UdaStore.Module.Core.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PublishedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     SeoTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedById = table.Column<long>(type: "bigint", nullable: true),
                     UpdatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
@@ -1002,6 +925,91 @@ namespace UdaStore.Module.Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Core_UserClaim",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Core_UserClaim", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Core_UserClaim_Core_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Core_User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Core_UserLogin",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Core_UserLogin", x => new { x.LoginProvider, x.ProviderKey });
+                    table.ForeignKey(
+                        name: "FK_Core_UserLogin_Core_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Core_User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Core_UserRole",
+                columns: table => new
+                {
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    RoleId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Core_UserRole", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_Core_UserRole_Core_Role_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Core_Role",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Core_UserRole_Core_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Core_User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Core_UserToken",
+                columns: table => new
+                {
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Core_UserToken", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.ForeignKey(
+                        name: "FK_Core_UserToken_Core_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Core_User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders_Order",
                 columns: table => new
                 {
@@ -1009,7 +1017,6 @@ namespace UdaStore.Module.Core.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     BillingAddressId = table.Column<long>(type: "bigint", nullable: false),
                     CreatedById = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedById1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     OrderStatus = table.Column<int>(type: "int", nullable: false),
                     ParentId = table.Column<long>(type: "bigint", nullable: true),
@@ -1028,11 +1035,11 @@ namespace UdaStore.Module.Core.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Orders_Order_Core_User_CreatedById1",
-                        column: x => x.CreatedById1,
+                        name: "FK_Orders_Order_Core_User_CreatedById",
+                        column: x => x.CreatedById,
                         principalTable: "Core_User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Orders_Order_Orders_Order_ParentId",
                         column: x => x.ParentId,
@@ -1061,51 +1068,23 @@ namespace UdaStore.Module.Core.Migrations
                     ReviewerName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Reviews_Review", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Reviews_Review_Core_User_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Reviews_Review_Core_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "Core_User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ActivityLog_Activity_ActivityTypeId",
                 table: "ActivityLog_Activity",
                 column: "ActivityTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetRoleClaims_RoleId",
-                table: "AspNetRoleClaims",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
-                table: "AspNetRoles",
-                column: "NormalizedName",
-                unique: true,
-                filter: "[NormalizedName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserClaims_UserId",
-                table: "AspNetUserClaims",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserLogins_UserId",
-                table: "AspNetUserLogins",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_RoleId",
-                table: "AspNetUserRoles",
-                column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Catalog_Category_ParentId",
@@ -1243,6 +1222,18 @@ namespace UdaStore.Module.Core.Migrations
                 column: "EntityTypeId");
 
             migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "Core_Role",
+                column: "NormalizedName",
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Core_RoleClaim_RoleId",
+                table: "Core_RoleClaim",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Core_StateOrProvince_CountryId",
                 table: "Core_StateOrProvince",
                 column: "CountryId");
@@ -1285,6 +1276,21 @@ namespace UdaStore.Module.Core.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Core_UserClaim_UserId",
+                table: "Core_UserClaim",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Core_UserLogin_UserId",
+                table: "Core_UserLogin",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Core_UserRole_RoleId",
+                table: "Core_UserRole",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Core_WidgetInstance_WidgetId",
                 table: "Core_WidgetInstance",
                 column: "WidgetId");
@@ -1305,9 +1311,9 @@ namespace UdaStore.Module.Core.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_CartItem_UserId1",
+                name: "IX_Orders_CartItem_UserId",
                 table: "Orders_CartItem",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_Order_BillingAddressId",
@@ -1315,9 +1321,9 @@ namespace UdaStore.Module.Core.Migrations
                 column: "BillingAddressId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_Order_CreatedById1",
+                name: "IX_Orders_Order_CreatedById",
                 table: "Orders_Order",
-                column: "CreatedById1");
+                column: "CreatedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_Order_ParentId",
@@ -1355,17 +1361,9 @@ namespace UdaStore.Module.Core.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reviews_Review_UserId1",
+                name: "IX_Reviews_Review_UserId",
                 table: "Reviews_Review",
-                column: "UserId1");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUserRoles_Core_User_UserId",
-                table: "AspNetUserRoles",
-                column: "UserId",
-                principalTable: "Core_User",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                column: "UserId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Catalog_Product_Core_User_CreatedById",
@@ -1384,12 +1382,12 @@ namespace UdaStore.Module.Core.Migrations
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Orders_CartItem_Core_User_UserId1",
+                name: "FK_Orders_CartItem_Core_User_UserId",
                 table: "Orders_CartItem",
-                column: "UserId1",
+                column: "UserId",
                 principalTable: "Core_User",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Orders_OrderItem_Orders_Order_OrderId",
@@ -1416,21 +1414,6 @@ namespace UdaStore.Module.Core.Migrations
 
             migrationBuilder.DropTable(
                 name: "ActivityLog_Activity");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoleClaims");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUserClaims");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUserLogins");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUserRoles");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
                 name: "Catalog_ProductAttributeValue");
@@ -1463,6 +1446,21 @@ namespace UdaStore.Module.Core.Migrations
                 name: "Core_Entity");
 
             migrationBuilder.DropTable(
+                name: "Core_RoleClaim");
+
+            migrationBuilder.DropTable(
+                name: "Core_UserClaim");
+
+            migrationBuilder.DropTable(
+                name: "Core_UserLogin");
+
+            migrationBuilder.DropTable(
+                name: "Core_UserRole");
+
+            migrationBuilder.DropTable(
+                name: "Core_UserToken");
+
+            migrationBuilder.DropTable(
                 name: "Core_WidgetInstance");
 
             migrationBuilder.DropTable(
@@ -1484,9 +1482,6 @@ namespace UdaStore.Module.Core.Migrations
                 name: "ActivityLog_ActivityType");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
                 name: "Catalog_Category");
 
             migrationBuilder.DropTable(
@@ -1500,6 +1495,9 @@ namespace UdaStore.Module.Core.Migrations
 
             migrationBuilder.DropTable(
                 name: "Core_EntityType");
+
+            migrationBuilder.DropTable(
+                name: "Core_Role");
 
             migrationBuilder.DropTable(
                 name: "Core_Widget");

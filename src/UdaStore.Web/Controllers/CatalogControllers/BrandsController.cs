@@ -11,13 +11,13 @@ using UdaStore.Module.Catalog.Services;
 namespace UdaStore.Web.Controllers.CatalogControllers
 {
     [Route("api/brands")]
-    public class BrandController : Controller
+    public class BrandsController : Controller
     {
         private readonly IRepository<Brand> _repository;
         private readonly IBrandService _brandService;
         private readonly IMapper _mapper;
 
-        public BrandController(IRepository<Brand> repository,
+        public BrandsController(IRepository<Brand> repository,
             IBrandService brandService, IMapper mapper)
         {
             _repository = repository;
