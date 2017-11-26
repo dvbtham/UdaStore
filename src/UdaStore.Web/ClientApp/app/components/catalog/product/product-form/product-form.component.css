@@ -1,0 +1,28 @@
+.btn-delete{
+    border: none;
+    background: transparent;
+    float: right;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    transition: 3s ease-in;
+    -webkit-animation: 3s ease-in;
+    -o-animation: 3s ease-in;
+    -moz-animation: 3s ease-in;
+}
+
+.product-image-edit{
+    display: inline-block;
+    position: relative;
+    border: 1px solid #ccc;
+    margin: 1px;
+}
+
+.docs-style {
+    border: 1px solid #ccc; 
+    margin-left: 6px; 
+    margin-top: 5px; 
+    padding: 5px; 
+    float: left; 
+    display: block;
+}

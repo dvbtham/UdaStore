@@ -44,7 +44,6 @@ export class ProductFormComponent extends DateTimPickerBase {
   nativeElement: any;
   productImagesEl: any;
   @ViewChild('fileInput') fileInput: ElementRef;
-  @ViewChild('productImages') productImages: ElementRef;
 
   constructor(private categoryService: CategoryService,
     private brandService: BrandService, private toastyService: ToastyService,
@@ -219,9 +218,36 @@ export class ProductFormComponent extends DateTimPickerBase {
     this.productForm.product.attributes.splice(index, 1);
   }
 
-  changeImages() {
-    this.productImagesEl = this.productImages.nativeElement;
-    this.productForm.productImages = this.productImagesEl.files;
+  @ViewChild('productImages') productImages: any;
+  @ViewChild('productDocuments') productDocuments: any;
+
+  imageChange(fileInput: any) {
+    this.productForm.productImages = <Array<File>>fileInput.target.files;
+  }
+  fileNames: string[];
+  docChange(fileInput: any) {
+    this.fileNames = [];
+    this.productForm.productDocuments = <Array<File>>fileInput.target.files;
+    for (let i = 0; i < fileInput.target.files.length; i++) {
+      this.fileNames.push(fileInput.target.files[i].name);
+    }
+  }
+
+  deleteImages(media: any) {
+    const index = this.productForm.product.productImages.indexOf(media);
+    if (index > -1) {
+      this.productForm.product.productImages.splice(index, 1);
+      this.productForm.product.deletedMediaIds.push(media.id);
+    }
+  }
+
+  deleteDocs(media: any) {
+    const index = this.productForm.product.productDocuments.indexOf(media);
+    if (index > -1) {
+      this.productForm.product.productDocuments.splice(index, 1);
+      this.productForm.product.deletedMediaIds.push(media.id);
+    }
+
   }
 
   save(option) {

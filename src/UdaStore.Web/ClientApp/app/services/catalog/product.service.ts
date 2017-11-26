@@ -13,22 +13,30 @@ export class ProductService extends AppService {
 
   updateWithFile(id: number, entity: any, file: any) {
     var formData = new FormData();
-   
+
     formData.append('file', file);
-    formData.append('productImages', entity.productImages);
+    for (var i = 0; i < entity.productImages.length; i++)
+    {
+        formData.append('productImages', entity.productImages[i], entity.productImages[i].name);
+    }
+    for (var i = 0; i < entity.productDocuments.length; i++)
+    {
+        formData.append('productDocuments', entity.productDocuments[i], entity.productDocuments[i].name);
+    }
+    
     this.emptyFiles(entity);
     formData.append('resource', JSON.stringify(entity));
-    
+
     return this.newHttp.put(`${this.BASE_END_POINT}/${id}`, formData).map(result => result.json());
   }
 
-  updateIdOnly(id){
+  updateIdOnly(id) {
     return this.newHttp.get(`${this.BASE_END_POINT}/${id}/idOnly`).map(result => console.log("success"));
   }
 
-  emptyFiles(productForm: ProductForm){
-      productForm.productImages = [];
-      productForm.productDocuments = [];
+  emptyFiles(productForm: ProductForm) {
+    productForm.productImages = [];
+    productForm.productDocuments = [];
   }
 
   createWithFile(entity: ProductForm, file: any) {

@@ -21,6 +21,7 @@ using UdaStore.Module.Catalog.ViewModel;
 using UdaStore.Infrastructure.Web.SmartTable;
 using Microsoft.Extensions.Options;
 using UdaStore.Module.Core.Extensions;
+using System.Net.Http;
 
 namespace UdaStore.Web.Controllers.CatalogControllers
 {
