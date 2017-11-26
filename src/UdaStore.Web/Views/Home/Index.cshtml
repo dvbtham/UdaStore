@@ -2,7 +2,13 @@
     ViewData["Title"] = "Home Page";
 }
 
-<app xasp-prerender-module="ClientApp/dist/main-server">Loading...</app>
+<app xasp-prerender-module="ClientApp/dist/main-server">
+<div class="overlay">
+  <div class="overlay-content">
+   <img src="/uploads/loading.gif"/>
+  </div>
+</div>
+</app>
 
 <script src="~/dist/vendor.js" asp-append-version="true"></script>
 @section scripts {

@@ -20,7 +20,12 @@ const nonTreeShakableModules = [
     'es6-promise',
     'es6-shim',
     'event-source-polyfill',
+    'ng-pick-datetime',
+    'ng-pick-datetime/assets/style/picker.min.css',
     'ng2-toasty',
+    'froala-editor',
+    'froala-editor/css/froala_editor.pkgd.min.css',
+    'froala-editor/css/froala_style.min.css',
     'ng2-toasty/bundles/style.css',
     'jquery'
 ];

@@ -35,10 +35,24 @@ import { CategoryService } from './services/catalog/category.service';
 import { ProductComponent } from './components/catalog/product/product.component';
 import { ProductFormComponent } from './components/catalog/product/product-form/product-form.component';
 import { ProductService } from './services/catalog/product.service';
+import { UserComponent } from './components/core/user/user.component';
+import { UserFormComponent } from './components/core/user/user-form/user-form.component';
+import { UserService } from './services/core/user.service';
+import { RoleService } from './services/core/role.service';
+import { NumberInput } from './directives/number-input.directive';
+import { ValidPassword } from './directives/passwords.directive';
+import { NgbModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { DateTimePickerModule } from 'ng-pick-datetime';
+import "froala-editor/js/froala_editor.pkgd.min.js";
+import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+import { LoadingComponent } from './components/shared/loading/loading.component';
+import { TagInputModule } from 'ngx-chips';
 
 @NgModule({
     declarations: [
         AppComponent,
+        NumberInput,
+        ValidPassword,
         NavMenuComponent,
         CounterComponent,
         FetchDataComponent,
@@ -57,7 +71,11 @@ import { ProductService } from './services/catalog/product.service';
         CategoryComponent,
         CategoryFormComponent,
         ProductComponent,
-        ProductFormComponent
+        ProductFormComponent,
+        UserComponent,
+        UserFormComponent,
+        LoadingComponent
+        
     ],
     imports: [
         CommonModule,
@@ -65,7 +83,11 @@ import { ProductService } from './services/catalog/product.service';
         FormsModule,
         DataTableModule,
         NgUploaderModule,
+        DateTimePickerModule,
+        TagInputModule,
         ToastyModule.forRoot(),
+        NgbModule.forRoot(),
+        FroalaEditorModule.forRoot(), FroalaViewModule.forRoot(),
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
@@ -73,6 +95,10 @@ import { ProductService } from './services/catalog/product.service';
             { path: 'brands', component: BrandComponent },
             { path: 'brands/new', component: BrandFormComponent },
             { path: 'brands/:id', component: BrandFormComponent },
+
+            { path: 'users', component: UserComponent },
+            { path: 'users/new', component: UserFormComponent },
+            { path: 'users/:id', component: UserFormComponent },
 
             { path: 'categories', component: CategoryComponent },
             { path: 'categories/new', component: CategoryFormComponent },
@@ -113,7 +139,9 @@ import { ProductService } from './services/catalog/product.service';
         ProductOptionsService,
         ProductService,
         ProductAttributesService,
-        ProductAttributeGroupService
+        ProductAttributeGroupService,
+        UserService,
+        RoleService
     ]
 })
 export class AppModuleShared {

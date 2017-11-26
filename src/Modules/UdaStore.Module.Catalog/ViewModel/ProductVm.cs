@@ -33,6 +33,7 @@ namespace UdaStore.Module.Catalog.ViewModel
         public bool IsAllowToOrder { get; set; }
 
         public bool IsOutOfStock { get; set; }
+        public int StockQuantity { get; set; } = 0;
 
         [Required]
         public string Name { get; set; }

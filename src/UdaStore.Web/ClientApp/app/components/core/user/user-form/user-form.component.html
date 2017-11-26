@@ -1,0 +1,86 @@
+<form #f="ngForm" (ngSubmit)="save()">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">Thông tin Người dùng</h3>
+        </div>
+        <div class="box-body">
+          <div class="form-group">
+            <label for="fullName">Họ tên</label>
+            <input type="text" required #fullName="ngModel" class="form-control" name="fullName" id="fullName" [(ngModel)]="user.fullName"
+              placeholder="Nhập họ tên">
+
+            <div class="alert alert-danger" *ngIf="fullName.touched && fullName.invalid">
+              Bạn chưa nhập Họ tên.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" email required #email="ngModel" class="form-control" name="email" id="email" [(ngModel)]="user.email"
+              placeholder="Nhập Email">
+
+            <div class="alert alert-danger" *ngIf="email.touched && email.invalid">
+              <div *ngIf="email.errors.required">
+                Bạn chưa nhập Email.
+              </div>
+              <div *ngIf="email.errors.email">
+                Vui lòng nhập Email đúng định dạng.
+              </div>
+            </div>
+          </div>
+          <div class="form-group" *ngIf="id == 0 || id == undefined">
+            <label for="password">Mật khẩu</label>
+            <input validPassword type="password" maxlength="128" required #password="ngModel" password="password" class="form-control"
+              name="password" id="password" [(ngModel)]="user.password" placeholder="Nhập password">
+            <div class="alert alert-danger" *ngIf="password.touched && password.invalid">
+              <div *ngIf="password.errors.required">
+                Bạn chưa nhập Mật khẩu.
+              </div>
+
+              <div *ngIf="password.errors.inValidPassword">
+                Mật khẩu phải có ít nhất 6 ký tự bao gồm một chữ số, chữ in hoa, và ký tự đặc biệt.
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="phoneNumber">Số điện thoại</label>
+            <input type="text" maxlength="30" NumberInput="true" required #phoneNumber="ngModel" class="form-control" name="phoneNumber"
+              id="phoneNumber" [(ngModel)]="user.phoneNumber" placeholder="Nhập Số điện thoại">
+
+            <div class="alert alert-danger" *ngIf="phoneNumber.touched && phoneNumber.invalid">
+              <div *ngIf="phoneNumber.errors.required">
+                Bạn chưa nhập Số điện thoại
+              </div>
+              <div *ngIf="phoneNumber.errors.maxlength">
+                Chỉ được nhập 30 số.
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="box-footer">
+          <button class="btn btn-primary" type="submit" [disabled]="!f.valid">Lưu lại</button>
+          <a class="btn btn-danger" [routerLink]="['/users']">Hủy</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">Danh sách Quyền</h3>
+        </div>
+        <div class="box-body">
+          <div class="checkbox" *ngFor="let role of roles">
+            <label>
+              <input type="checkbox" [checked]="user.roleIds.includes(role.id)" (click)="onRoleToggle(role.id, $event)"> {{ role.name }}
+            </label>
+          </div>
+        </div>
+        <div class="box-footer">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

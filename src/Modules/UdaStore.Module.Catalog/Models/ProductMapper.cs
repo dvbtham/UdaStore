@@ -24,16 +24,16 @@ namespace UdaStore.Module.Catalog.Models
             product.IsCallForPricing = resource.Product.IsCallForPricing;
             product.IsAllowToOrder = resource.Product.IsAllowToOrder;
             product.BrandId = resource.Product.BrandId;
+            product.StockQuantity = resource.Product.StockQuantity;
+            product.HasOptions = resource.Product.Variations.Any() ? true : false;
+           
             if (!isUpdated)
             {
-                product.HasOptions = resource.Product.Variations.Any() ? true : false;
                 product.IsVisibleIndividually = true;
                 product.CreatedBy = currentUser;
             }
             else
-            {
                 product.UpdatedBy = currentUser;
-            }
 
         }
     }

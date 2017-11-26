@@ -94,7 +94,8 @@ namespace UdaStore.Web.Controllers.CatalogControllers
                 IsOutOfStock = product.StockQuantity == 0,
                 CategoryIds = product.Categories.Select(x => x.CategoryId).ToList(),
                 ThumbnailImageUrl = _mediaService.GetThumbnailUrl(product.ThumbnailImage),
-                BrandId = product.BrandId
+                BrandId = product.BrandId,
+                StockQuantity = product.StockQuantity ?? 0
             };
 
             foreach (var productMedia in product.Medias.Where(x => x.Media.MediaType == MediaType.Image))
@@ -164,8 +165,7 @@ namespace UdaStore.Web.Controllers.CatalogControllers
             return Json(productVm);
         }
 
-        [HttpPost("grid")]
-        public async Task<IActionResult> List([FromBody] SmartTableParam param)
+        public async Task<IActionResult> List()
         {
             var query = _productRepository.Query().Where(x => !x.IsDeleted);
             var currentUser = await _workContext.GetCurrentUser();
@@ -174,51 +174,7 @@ namespace UdaStore.Web.Controllers.CatalogControllers
                 query = query.Where(x => x.VendorId == currentUser.VendorId);
             }
 
-            if (param.Search.PredicateObject != null)
-            {
-                dynamic search = param.Search.PredicateObject;
-                if (search.Name != null)
-                {
-                    string name = search.Name;
-                    query = query.Where(x => x.Name.Contains(name));
-                }
-
-                if (search.HasOptions != null)
-                {
-                    bool hasOptions = search.HasOptions;
-                    query = query.Where(x => x.HasOptions == hasOptions);
-                }
-
-                if (search.IsVisibleIndividually != null)
-                {
-                    bool isVisibleIndividually = search.IsVisibleIndividually;
-                    query = query.Where(x => x.IsVisibleIndividually == isVisibleIndividually);
-                }
-
-                if (search.IsPublished != null)
-                {
-                    bool isPublished = search.IsPublished;
-                    query = query.Where(x => x.IsPublished == isPublished);
-                }
-
-                if (search.CreatedOn != null)
-                {
-                    if (search.CreatedOn.before != null)
-                    {
-                        DateTimeOffset before = search.CreatedOn.before;
-                        query = query.Where(x => x.CreatedOn <= before);
-                    }
-
-                    if (search.CreatedOn.after != null)
-                    {
-                        DateTimeOffset after = search.CreatedOn.after;
-                        query = query.Where(x => x.CreatedOn >= after);
-                    }
-                }
-            }
-
-            var gridData = query.ToSmartTableResult(
-                param,
+            var gridData = query.Select(
                 x => new ProductListItem
                 {
                     Id = x.Id,
@@ -232,7 +188,6 @@ namespace UdaStore.Web.Controllers.CatalogControllers
                     CreatedOn = x.CreatedOn,
                     IsPublished = x.IsPublished
                 });
-
             return Json(gridData);
         }
 
@@ -240,7 +195,11 @@ namespace UdaStore.Web.Controllers.CatalogControllers
         public async Task<IActionResult> Post(IFormFile file)
         {
             var json = HttpContext.Request.Form["resource"];
-            var resource = JsonConvert.DeserializeObject<ProductSaveResource>(json.ToString());
+
+            json = json.ToString();
+
+            if (string.IsNullOrEmpty(json)) return BadRequest("Null data");
+            var resource = JsonConvert.DeserializeObject<ProductSaveResource>(json);
             resource.ThumbnailImage = file;
             if (!ModelState.IsValid || resource == null)
             {
@@ -276,7 +235,7 @@ namespace UdaStore.Web.Controllers.CatalogControllers
 
             _productService.Create(product);
 
-            return Ok();
+            return Ok(resource);
         }
 
         private void ApplyProductAttributeValue(ProductSaveResource resource, Product product)
@@ -325,8 +284,13 @@ namespace UdaStore.Web.Controllers.CatalogControllers
         public async Task<IActionResult> Put(long id, IFormFile file)
         {
             var json = HttpContext.Request.Form["resource"];
+            if (string.IsNullOrEmpty(json)) return BadRequest("Null data");
             var resource = JsonConvert.DeserializeObject<ProductSaveResource>(json.ToString());
+
+            if (resource == null) return BadRequest("Resource null");
+
             resource.ThumbnailImage = file;
+
             if (!ModelState.IsValid)
             {
                 return new BadRequestObjectResult(ModelState);
@@ -346,16 +310,12 @@ namespace UdaStore.Web.Controllers.CatalogControllers
             {
                 return new BadRequestObjectResult(new { error = "You don't have permission to manage this product" });
             }
-
-            product.Modify(resource, currentUser, true);
+            
+            product.Modify(resource, currentUser, isUpdated: true);
 
             if (resource.Product.IsOutOfStock)
             {
                 product.StockQuantity = 0;
-            }
-            else
-            {
-                product.StockQuantity = null;
             }
 
             SaveProductMedias(resource, product);
@@ -373,19 +333,30 @@ namespace UdaStore.Web.Controllers.CatalogControllers
             AddOrDeleteProductVariation(resource, product);
             AddOrDeleteProductRelation(resource, product);
 
+            MapProductVariationVmToProduct(resource, product);
+            MapProductRelationVmToProduct(resource, product);
+
             _productService.Update(product);
 
-            return Ok();
+            return Ok(resource);
         }
 
-        [HttpPost("change-status/{id}")]
-        public async Task<IActionResult> ChangeStatus(long id)
+        [HttpGet("{id}/idOnly")]
+        public async Task<IActionResult> UpdateById(long id)
         {
-            var product = _productRepository.Query().FirstOrDefault(x => x.Id == id);
-            if (product == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return new BadRequestObjectResult(ModelState);
             }
+
+            var product = _productRepository.Query()
+                        .Include(x => x.ThumbnailImage)
+                        .Include(x => x.Medias).ThenInclude(m => m.Media)
+                        .Include(x => x.ProductLinks).ThenInclude(x => x.LinkedProduct)
+                        .Include(x => x.OptionValues).ThenInclude(o => o.Option)
+                        .Include(x => x.AttributeValues).ThenInclude(a => a.Attribute).ThenInclude(g => g.Group)
+                        .Include(x => x.Categories)
+                        .FirstOrDefault(x => x.Id == id);
 
             var currentUser = await _workContext.GetCurrentUser();
             if (!User.IsInRole("admin") && product.VendorId != currentUser.VendorId)
@@ -394,10 +365,12 @@ namespace UdaStore.Web.Controllers.CatalogControllers
             }
 
             product.IsPublished = !product.IsPublished;
-            _productRepository.SaveChange();
+
+            _productService.Update(product);
 
             return Ok();
         }
+       
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
@@ -416,7 +389,7 @@ namespace UdaStore.Web.Controllers.CatalogControllers
 
             _productService.Delete(product);
 
-            return Ok();
+            return Ok(product);
         }
 
         private static void MapProductVariationVmToProduct(ProductSaveResource model, Product product)
@@ -657,7 +630,6 @@ namespace UdaStore.Web.Controllers.CatalogControllers
                     product.ThumbnailImage = new Media { FileName = fileName };
                 }
             }
-
             // Currently model binder cannot map the collection of file productImages[0], productImages[1]
             foreach (var file in Request.Form.Files)
             {

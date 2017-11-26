@@ -4,7 +4,7 @@ import { CategoryService } from '../../../../services/catalog/category.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastyService } from 'ng2-toasty';
 import {
-  SaveSuccesMessage,
+  SaveSuccessMessage,
   SaveErrorMessage
 }
   from '../../../../services/app-service';
@@ -39,7 +39,7 @@ export class CategoryFormComponent {
       this.categoryService.create(this.category);
 
     result$.subscribe(res => {
-      this.toastyService.success(SaveSuccesMessage);
+      this.toastyService.success(SaveSuccessMessage);
       this.router.navigate(['/categories']);
     }, error => {
       this.toastyService.error(SaveErrorMessage);
@@ -54,7 +54,7 @@ export class CategoryFormComponent {
   uploadPhoto() {
     this.categoryService.uploadPhoto(this.id, this.file)
       .subscribe(res => {
-        this.toastyService.success(SaveSuccesMessage);
+        this.toastyService.success(SaveSuccessMessage);
         this.categoryService.get(this.id).subscribe(res => this.category = res);
       }, error => {
         this.toastyService.error({

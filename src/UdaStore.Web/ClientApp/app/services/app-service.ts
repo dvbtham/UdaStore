@@ -29,7 +29,7 @@ export class AppService {
     }
 }
 
-export var SaveSuccesMessage = {
+export var SaveSuccessMessage = {
     title: 'Thành công',
     msg: 'Dữ liệu đã được lưu.',
     theme: 'material',

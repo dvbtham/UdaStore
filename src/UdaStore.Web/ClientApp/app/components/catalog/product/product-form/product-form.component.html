@@ -1,3 +1,379 @@
-<p>
-  product-form works!
-</p>
+<div class="row">
+  <div class="col-md-12">
+    <div class="box box-primary">
+      <div class="box-header">
+        <h3 class="box-title">Quản lý Sản phẩm</h3>
+      </div>
+      <form #f (ngSubmit)="save(true)">
+        <div class="box-body">
+          <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+              <li class="active">
+                <a href="#general" data-toggle="tab">Thông tin chung</a>
+              </li>
+              <li class="">
+                <a href="#p-options" data-toggle="tab">Những tùy chọn Sản phẩm</a>
+              </li>
+              <li class="">
+                <a href="#attributes" data-toggle="tab">Đặc tính của Sản phẩm</a>
+              </li>
+              <li class="">
+                <a href="#related" data-toggle="tab">Sản phẩm tương tự</a>
+              </li>
+              <li class="">
+                <a href="#cross-sell" data-toggle="tab">Sản phẩm bán chéo</a>
+              </li>
+            </ul>
+
+            <div class="tab-content">
+              <div class="tab-pane active fade in" id="general">
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="box-header with-border">
+                      <h3 class="box-title">Cơ bản</h3>
+                    </div>
+                    <div class="box-body">
+                      <div class="form-horizontal">
+                        <div class="form-group">
+                          <label for="name" class="col-sm-2 control-label">Tên sản phẩm</label>
+                          <div class="col-md-10">
+                            <input type="text" name="name" #name="ngModel" [(ngModel)]="productForm.product.name" required class="form-control" id="name"
+                              placeholder="Tên sản phẩm">
+                            <div class="alert alert-danger" *ngIf="name.touched && name.invalid">
+                              <div *ngIf="name.errors.required">
+                                Vui lòng nhập Tên sản phẩm.
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="brand" class="col-sm-2 control-label">Nhãn hiệu</label>
+                          <div class="col-md-10">
+                            <select name="brandId" [(ngModel)]="productForm.product.brandId" id="brand" class="form-control">
+                              <option value=""></option>
+                              <option *ngFor="let b of brands" [value]="b.id">{{ b.name }}</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="shortDescription" class="col-sm-2 control-label">Mô tả ngắn</label>
+                          <div class="col-md-10">
+                            <textarea [froalaEditor]="options" class="form-control" name="shortDescription" id="shortDescription" [(froalaModel)]="productForm.product.shortDescription"></textarea>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="description" class="col-sm-2 control-label">Mô tả</label>
+                          <div class="col-md-10">
+                            <textarea [froalaEditor]="options" class="form-control" name="description" id="description" [(froalaModel)]="productForm.product.description"></textarea>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="specification" class="col-sm-2 control-label">Thông số kỹ thuật</label>
+                          <div class="col-md-10">
+                            <textarea [froalaEditor]="options" class="form-control" name="specification" id="specification" [(froalaModel)]="productForm.product.specification"></textarea>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="price" class="col-sm-2 control-label">Giá</label>
+                          <div class="col-md-10">
+                            <input NumberInput="true" class="form-control" name="price" id="price" [(ngModel)]="productForm.product.price" />
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="oldPrice" class="col-sm-2 control-label">Giá cũ</label>
+                          <div class="col-md-10">
+                            <input NumberInput="true" class="form-control" name="oldPrice" id="oldPrice" [(ngModel)]="productForm.product.oldPrice" />
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="specialPrice" class="col-sm-2 control-label">Giá đặc biệt</label>
+                          <div class="col-md-10">
+                            <input NumberInput="true" class="form-control" name="specialPrice" id="specialPrice" [(ngModel)]="productForm.product.specialPrice"
+                            />
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="specialPriceStart" class="col-sm-2 control-label">Bắt đầu Giá đặc biệt</label>
+                          <div class="col-md-10">
+                            <owl-date-time name="specialPriceStart" id="specialPriceStart" type="calendar" [locale]="vi" [(ngModel)]="productForm.product.specialPriceStart"
+                              autoClose="true" placeHolder="dd/mm/yyyy" dateFormat="DD/MM/YYYY"></owl-date-time>
+
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="specialPriceEnd" class="col-sm-2 control-label">Kết thúc Giá đặc biệt</label>
+                          <div class="col-md-10">
+                            <owl-date-time name="specialPriceEnd" id="specialPriceEnd" type="calendar" [locale]="vi" [(ngModel)]="productForm.product.specialPriceEnd"
+                              autoClose="true" placeHolder="dd/mm/yyyy" dateFormat="DD/MM/YYYY"></owl-date-time>
+
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="stockQuantity" class="col-sm-2 control-label">Số tồn kho</label>
+                          <div class="col-md-10">
+                            <input NumberInput="true" type="text" name="stockQuantity" #stockQuantity="ngModel" [(ngModel)]="productForm.product.stockQuantity" required
+                              class="form-control" id="stockQuantity" placeholder="Số tồn kho">
+                          </div>
+                        </div>
+                        
+                        <div class="form-group">
+                          <label class="col-sm-2 control-label">Hình đại diện</label>
+                          <div class="col-sm-10">
+                            <input #fileInput class="form-control" (change)="changeFile()" type="file" [(ngModel)]="productForm.product.thumbnailImage"
+                              name="thumbnailImage" accept="'image/*'">
+                            <img [src]="productForm.product.thumbnailImageUrl" *ngIf="productForm.product.thumbnailImageUrl" style="width: 80px; height: 90px; margin-top: 7px;">
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label class="col-sm-2 control-label">Hình sản phẩm</label>
+                          <div class="col-sm-10">
+                            <input class="form-control" type="file" [(ngModel)]="productForm.product.productImages" multiple="true" multiple name="productImages"
+                              #productImages (change)="changeImages()" accept="'image/*'">
+
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label class="col-sm-2 control-label">Tài liệu kỹ thuật</label>
+                          <div class="col-sm-10">
+                            <input name="productDocuments" class="form-control" type="file" [(ngModel)]="productForm.product.productDocuments" multiple
+                              name="productDocuments" accept="'.pdf,.doc'">
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" [(ngModel)]="productForm.product.isFeatured" name="isFeatured"> Nổi bật
+                              </label>
+                            </div>
+
+                            <div class="checkbox">
+                              <label>
+                                <input [(ngModel)]="productForm.product.isPublished" name="isPublished" type="checkbox"> Công bố
+                              </label>
+                            </div>
+
+                            <div class="checkbox">
+                              <label>
+                                <input [(ngModel)]="productForm.product.isCallForPricing" name="isCallForPricing" type="checkbox"> Gọi để biết giá
+                              </label>
+                            </div>
+
+                            <div class="checkbox">
+                              <label>
+                                <input name="isAllowToOrder" [(ngModel)]="productForm.product.isAllowToOrder" type="checkbox"> Cho phép đặt hàng
+                              </label>
+                            </div>
+
+                            <div class="checkbox">
+                              <label>
+                                <input [checked]="productForm.product.isOutOfStock" [(ngModel)]="productForm.product.isOutOfStock" name="isOutOfStock" type="checkbox"> Hết hàng
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+                  <div class="col-md-4">
+                    <div class="box-header with-border">
+                      <h3 class="box-title">Danh mục</h3>
+                    </div>
+                    <div class="checkbox" *ngFor="let c of categories">
+                      <label>
+                        <input [checked]="productForm.product.categoryIds.includes(c.id)" (click)="categoryToggle(c.id, $event)" type="checkbox"> {{ c.name }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tab-pane fade" id="p-options">
+                <div class="form-horizontal">
+                  <div class="form-group">
+                    <label for="addingOption" class="col-sm-2 control-label">Tùy chọn khả dụng</label>
+                    <div class="col-md-4">
+                      <select class="form-control" name="addingOption" id="addingOption" [(ngModel)]="addingOptionJson">
+                        <option value=""> -- Danh sách tùy chọn -- </option>
+                        <option *ngFor="let o of productOptions" value="{{ o | json }}">
+                          {{ o.name }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col-md-2">
+                      <button type="button" [disabled]="!addingOptionJson" (click)="addProductOptions()" class="btn btn-info">Thêm tùy chọn</button>
+                    </div>
+                  </div>
+                  <div class="form-group" *ngIf="productForm.product.options.length > 0">
+                    <label class="col-sm-2 control-label">Giá trị của tùy chọn</label>
+                  </div>
+                  <div *ngIf="productForm.product.options.length > 0">
+                    <div class="form-group" *ngFor="let item of productForm.product.options">
+                      <label class="col-sm-2 control-label">{{ item.name }}</label>
+                      <div class="col-md-4">
+                        <tag-input [modelAsStrings]="true" name="option{{item.id}}" (keyup.enter)="transform" [(ngModel)]="item.values" [editable]="true"
+                          [placeholder]="'Thêm mới'" [secondaryPlaceholder]="'Nhập tên giá trị'">
+                        </tag-input>
+                      </div>
+                      <div class="col-md-2">
+                        <button type="button" (click)="deleteOptions(item)" class="btn btn-danger">Xóa tùy chọn</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group" *ngIf="productForm.product.options.length > 0 && productForm.product.id > 0">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <button type="button" class="btn btn-default" (click)="generateOptionCombination()">Tự động tạo tùy chọn sản phẩm</button>
+                    </div>
+                  </div>
+
+                  <div class="form-group" *ngIf="productForm.product.options.length > 0">
+                    <label class="col-sm-2 control-label">Tùy chọn của sản phẩm</label>
+                    <div class="col-sm-10">
+                      <div class="table-responsive no-padding">
+                        <table class="table table-hover">
+                          <tr>
+                            <th>Sự kết hợp của những tùy chọn</th>
+                            <th>Giá</th>
+                            <th>Giá cũ</th>
+                            <th>Hình Ảnh</th>
+                            <th>Thao tác</th>
+                          </tr>
+                          <tr *ngFor="let variation of productForm.product.variations">
+                            <td>{{ variation.name }}</td>
+                            <td>
+                              <input [(ngModel)]="variation.price" name="price" NumberInput="true" class="form-control" type="text">
+                            </td>
+                            <td>
+                              <input [(ngModel)]="variation.oldPrice" name="oldPrice" NumberInput="true" class="form-control" type="text">
+                            </td>
+                            <td>
+                              <img [src]="productForm.product.thumbnailImageUrl" style="margin-top: 10px; width: 50px; height: 60px;">
+                            </td>
+                            <td>
+                              <button (click)="deleteVariation(variation)" type="button" class="btn btn-sm btn-danger">
+                                <i class="glyphicon glyphicon-remove"></i>
+                              </button>
+                            </td>
+                          </tr>
+                          
+                          <tr>
+                            <td>
+                              <div *ngFor="let option of productForm.product.options">
+                                <div>
+                                  <select class="form-control" name="addingVariation" [(ngModel)]="addingVariation[option.name]">
+                                    <option value=""> -- Chọn giá trị tùy chọn --</option>
+                                    <option *ngFor="let value of option.values" value="{{ value }}">{{ value }}</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <input id="addingVariationPrice" NumberInput="true" name="addingVariationPrice" type="text" decimal maxlength="10" class="form-control"
+                                [(ngModel)]="addingVariation.price" />
+                            </td>
+                            <td>
+                              <input id="addingVariationOldPrice" NumberInput="true" name="addingVariationOldPrice" type="text" decimal maxlength="10"
+                                class="form-control" [(ngModel)]="addingVariation.oldPrice" />
+
+                            </td>
+                            <td class="col-sm-2"></td>
+                            <td class="col-sm-2">
+                              <button type="button" class="btn btn-sm btn-primary" [disabled]="!isAddVariationFormValid()" (click)="addVariation()">
+                                <span class="glyphicon glyphicon-plus"></span>
+                              </button>
+                            </td>
+                          </tr>
+
+                        </table>
+                      </div>
+                      <!-- /.box -->
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="tab-pane fade" id="attributes">
+                <div class="form-horizontal">
+                  
+                  <div class="form-group">
+                    <label for="productTemplate" class="col-sm-2 control-label">Mẫu sản phẩm</label>
+                    <div class="col-md-4">
+                      <select class="form-control" name="productTemplate" id="productTemplate" [(ngModel)]="productTemplate.id">
+                        <option value=""> -- Chọn mẫu sản phẩm -- </option>
+                        <option *ngFor="let pt of productTemplates" value="{{ pt.id }}">
+                          {{ pt.name }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col-md-2">
+                      <button type="button" [disabled]="productTemplate.id == 0" (click)="applyTemplate()" class="btn btn-info">Áp dụng mẫu này</button>
+                    </div>
+                  </div>
+                  <div class="form-group" *ngIf="productForm.product.attributes.length > 0">
+                    <label class="col-sm-2 control-label">Thuộc tính của sản phẩm</label>
+                    <div class="col-sm-10">
+                      <div class="table-responsive no-padding">
+                        <table class="table table-hover">
+                          <tr>
+                            <th>Tên thuộc tính</th>
+                            <th>Giá trị</th>
+                            <th>Thao tác</th>
+                          </tr>
+                          <tr *ngFor="let attr of productForm.product.attributes">
+                            <td>{{ attr.name }}</td>
+                            <td>
+                              <input [(ngModel)]="attr.value" name="attrValue" class="form-control" type="text">
+                            </td>
+                            <td>
+                              <button (click)="deleteAttribute(attr)" type="button" class="btn btn-sm btn-danger">
+                                <i class="glyphicon glyphicon-remove"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="tab-pane fade" id="related">
+
+              </div>
+
+              <div class="tab-pane fade" id="cross-sell">
+
+              </div>
+              <!-- /.tab-pane -->
+            </div>
+            <!-- /.tab-content -->
+          </div>
+          <button type="button" [disabled]="name.invalid" (click)="save(false)" class="btn btn-primary">Lưu Lại</button>
+          <button [disabled]="name.invalid" class="btn btn-info">Lưu và Thoát</button>
+          <a [routerLink]="['/products']" class="btn btn-danger">Hủy</a>
+        </div>
+      </form>
+
+    </div>
+
+  </div>
+</div>
