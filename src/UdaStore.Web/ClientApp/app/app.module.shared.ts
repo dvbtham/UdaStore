@@ -47,6 +47,18 @@ import "froala-editor/js/froala_editor.pkgd.min.js";
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { LoadingComponent } from './components/shared/loading/loading.component';
 import { TagInputModule } from 'ngx-chips';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LoadingBarHttpModule } from '@ngx-loading-bar/http';
+import { AppsettingComponent } from './components/core/appsetting/appsetting.component';
+import { AppSettingService } from './services/core/app-setting.service';
+import { ProductWidgetComponent } from './components/catalog/product-widget/product-widget.component';
+import { HtmlWidgetComponent } from './components/cms/html-widget/html-widget.component';
+import { CarouselWidgetComponent } from './components/cms/carousel-widget/carousel-widget.component';
+import { WidgetComponent } from './components/core/widget/widget.component';
+import { WidgetService } from './services/core/widget.service';
+import { PageComponent } from './components/cms/page/page.component';
+import { PageFormComponent } from './components/cms/page/page-form/page-form.component';
+import { PageService } from './services/cms/page.service';
 
 @NgModule({
     declarations: [
@@ -74,7 +86,14 @@ import { TagInputModule } from 'ngx-chips';
         ProductFormComponent,
         UserComponent,
         UserFormComponent,
-        LoadingComponent
+        LoadingComponent,
+        AppsettingComponent,
+        ProductWidgetComponent,
+        HtmlWidgetComponent,
+        CarouselWidgetComponent,
+        WidgetComponent,
+        PageComponent,
+        PageFormComponent
         
     ],
     imports: [
@@ -84,7 +103,8 @@ import { TagInputModule } from 'ngx-chips';
         DataTableModule,
         NgUploaderModule,
         DateTimePickerModule,
-        TagInputModule,
+        TagInputModule,    
+        LoadingBarHttpModule,
         ToastyModule.forRoot(),
         NgbModule.forRoot(),
         FroalaEditorModule.forRoot(), FroalaViewModule.forRoot(),
@@ -125,6 +145,19 @@ import { TagInputModule } from 'ngx-chips';
             { path: 'product-templates/new', component: ProductTemplatesFormComponent },
             { path: 'product-templates/:id', component: ProductTemplatesFormComponent },
 
+            { path: 'settings', component:  AppsettingComponent},
+            { path: 'widgets', component:  WidgetComponent},
+
+            { path: 'widget-carousel-create', component:  CarouselWidgetComponent},
+            { path: 'widget-carousel-edit/:id', component:  CarouselWidgetComponent},            
+            { path: 'widget-html-create', component:  HtmlWidgetComponent},
+            { path: 'widget-html-edit/:id', component:  HtmlWidgetComponent},
+            { path: 'widget-product-create', component:  ProductWidgetComponent},
+            { path: 'widget-product-edit/:id', component:  ProductWidgetComponent},
+
+            { path: 'pages', component:  PageComponent},
+            { path: 'pages/new', component:  PageFormComponent},
+            { path: 'pages/:id', component:  PageFormComponent},
 
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent },
@@ -141,7 +174,10 @@ import { TagInputModule } from 'ngx-chips';
         ProductAttributesService,
         ProductAttributeGroupService,
         UserService,
-        RoleService
+        RoleService,
+        AppSettingService,
+        WidgetService,
+        PageService
     ]
 })
 export class AppModuleShared {

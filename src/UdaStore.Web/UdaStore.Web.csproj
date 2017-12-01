@@ -2328,6 +2328,7 @@
     <ProjectReference Include="..\Modules\UdaStore.Module.Catalog\UdaStore.Module.Catalog.csproj" />
     <ProjectReference Include="..\Modules\UdaStore.Module.Orders\UdaStore.Module.Orders.csproj" />
     <ProjectReference Include="..\Modules\UdaStore.Module.Reviews\UdaStore.Module.Reviews.csproj" />
+    <ProjectReference Include="..\Modules\UdaStore.Module.Cms\UdaStore.Module.Cms.csproj" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">

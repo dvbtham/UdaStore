@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="box box-primary">
+      <div class="box-header">
+        <h3 class="box-title">Cài đặt hệ thống</h3>
+      </div>
+      <div class="box-body">
+        <div class="col-md-5">
+          <div *ngFor="let setting of settings">
+            <div class="form-group">
+              <label>{{setting.key}}</label>
+              <input type="text" class="form-control" name="{{setting.key}}" [(ngModel)]="setting.value" placeholder="Nhập giá trị của bạn...">
+            </div>
+          </div>
+          <button type="button" (click)="save(false)" class="btn btn-primary">Lưu lại</button>
+          <button type="button" (click)="save(true)" class="btn btn-info">Lưu và Thoát</button>
+          <a [routerLink]="['/home']" class="btn btn-danger">Hủy</a>
+        </div>        
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,100 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="box box-primary">
+      <div class="box-header">
+        <h3 class="box-title">{{ pageTitle }}</h3>
+      </div>
+      <form #f="ngForm">
+        <div class="box-body">
+          <div class="form-group">
+            <label>Tên Widget</label>
+            <input type="text" maxlength="700" required #name="ngModel" class="form-control" name="widgetName" [(ngModel)]="widgetInstance.name"
+              placeholder="Nhập tên Widget...">
+            <div class="alert alert-danger" *ngIf="name.touched && name.invalid">
+              <div *ngIf="name.errors.required">
+                Bạn chưa nhập Tên Widget
+              </div>
+              <div *ngIf="name.errors.maxlength">
+                Chỉ được nhập 700 ký tự
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Vùng Widget</label>
+            <select required #widgetZone="ngModel" name="widgetZoneId" [(ngModel)]="widgetInstance.widgetZoneId" class="form-control">
+              <option value="">-- Vui lòng chọn vùng Widget --</option>
+              <option *ngFor="let wz of widgetZones" value="{{ wz.id }}">{{ wz.name }}</option>
+            </select>
+            <div class="alert alert-danger" *ngIf="widgetZone.touched && widgetZone.invalid">
+              <div *ngIf="widgetZone.errors.required">
+                Bạn chưa chọn Vùng Widget
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="publishStart">Thời gian công bố </label>
+            <owl-date-time name="publishStart" id="publishStart" type="calendar" [locale]="vi" [(ngModel)]="widgetInstance.publishStart"
+              autoClose="true" placeHolder="dd/mm/yyyy" dateFormat="DD/MM/YYYY"></owl-date-time>
+
+          </div>
+
+          <div class="form-group">
+            <label for="publishEnd">Thời gian kết thúc</label>
+            <owl-date-time name="publishEnd" id="publishEnd" type="calendar" [locale]="vi" [(ngModel)]="widgetInstance.publishEnd" autoClose="true"
+              placeHolder="dd/mm/yyyy" dateFormat="DD/MM/YYYY"></owl-date-time>
+
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Slides</label>
+            <div class="col-sm-10">
+              <div class="form-group row" *ngFor="let item of widgetInstance.items; index as i">
+                <div class="col-md-11">
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Tiêu đề</label>
+                    <div class="col-sm-10">
+                      <input style="margin-bottom: 5px;" name="{{i}}caption" [(ngModel)]="item.caption" class="form-control" />
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Đường dẫn đích</label>
+                    <div class="col-sm-10">
+                      <input style="margin-bottom: 5px;" name="{{i}}targetUrl" [(ngModel)]="item.targetUrl" class="form-control" />
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Hình ảnh</label>
+                    <div class="col-sm-10">
+                      <input class="form-control" type="file" (change)="changeFile($event, item)" name="images{{i}}" accept="'image/*'">
+                      <img *ngIf="!item.uploadImage && item.imageUrl" src="{{item.imageUrl}}" style="width: 320px; height: 100px" />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-1 text-right">
+                  <button (click)="removeItem(item)" type="button" class="btn btn-danger btn-xs">
+                    <span class="glyphicon glyphicon-remove"></span>
+                  </button>
+                </div>
+              </div>
+              <button (click)="addItem()" type="button" class="btn btn-success btn-xs">
+                <span class="glyphicon glyphicon-plus"></span> Thêm slide
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="box-footer">
+          <button type="button" (click)="save(false)" [disabled]="!f.valid" class="btn btn-primary">Lưu lại</button>
+          <button type="button" (click)="save(true)" [disabled]="!f.valid" class="btn btn-info">Lưu và Thoát</button>
+          <a [routerLink]="['/widgets']" class="btn btn-danger">Hủy</a>
+        </div>
+      </form>
+
+
+    </div>
+
+  </div>
+</div>

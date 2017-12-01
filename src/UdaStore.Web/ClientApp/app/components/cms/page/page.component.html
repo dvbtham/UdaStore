@@ -1,0 +1,75 @@
+<div class="row">
+  <div class="col-md-12">
+        <div class="box box-primary">
+            <div class="box-body">
+                    <p>
+                       <a routerLink="/pages/new" class="btn btn-primary">Thêm mới</a>
+                    </p>
+                    <p>
+                        <input 
+                            #query
+                            (keyup)="filter(query.value)"
+                            type="text" class="form-control" placeholder="Nhập từ khóa để tìm...">
+                     </p>
+                <data-table id="brands-grid"
+                headerTitle="Danh sách Trang"
+                [items]="items"
+                [itemCount]="itemCount"
+                (reload)="reload($event)"
+        
+                [limit]="10"
+                [sortBy]="'rating'"
+                [sortAsc]="false"
+        
+                [multiSelect]="true"
+                [substituteRows]="false"
+                [expandableRows]="false"
+                [translations]="translations"
+                [indexColumnHeader]="'#'"
+                [selectOnRowClick]="false"
+                >
+                <data-table-column
+                    [property]="'name'"
+                    [header]="'Tên Trang'"
+                    [sortable]="true">
+                </data-table-column>
+                <data-table-column
+                    [property]="'seoTitle'"
+                    [header]="'Url'"
+                    [sortable]="true">
+                </data-table-column>
+
+                <data-table-column
+                [property]="'isPublished'"
+                [header]="'Công bố'"
+                [sortable]="true">
+
+                <ng-template #dataTableCell let-item="item">
+                    <i class="fa" [ngClass]="{'fa-check-square-o text-success': item.isPublished, 'fa-times text-danger': !item.isPublished}"></i>                       
+                 </ng-template>
+                </data-table-column>
+
+                <data-table-column
+                    [property]="'id'"  
+                    [header]="'Thao tác'"
+                >
+
+                    <ng-template #dataTableCell let-item="item">
+                        <a class="btn btn-info btn-xs" [routerLink]="['/pages/', item.id]">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <a class="btn btn-danger btn-xs" (click)="delete(item.id)">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                        <a class="btn btn-warning btn-xs" (click)="isPublishedToggle(item.id)">
+                            <i *ngIf="!item.isPublished" title="Công bố" class="fa fa-play text-success"></i>
+                            <i *ngIf="item.isPublished" title="Ngưng công bố" class="fa fa-pause text-danger"></i>
+                        </a>
+                    </ng-template>
+                </data-table-column>
+            </data-table>
+            <app-loading [items]="items"></app-loading>
+            </div>
+          </div>
+    </div>
+</div>

@@ -25,7 +25,7 @@ export class AppService {
     }
 
     delete(id: number) {
-        return this.http.delete(this.BASE_END_POINT + "/" + id).map(result => result.json());
+        return this.http.delete(this.BASE_END_POINT + "/" + id).map(result => result);
     }
 }
 

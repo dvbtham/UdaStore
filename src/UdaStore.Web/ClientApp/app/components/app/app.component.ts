@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 
 @Component({
     selector: 'app',
@@ -7,7 +8,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
     currentDate: any;
-    constructor() {
+    constructor(private loader: LoadingBarService, ) {
         this.currentDate = new Date().getFullYear().toString() === "2017" ?
             new Date().getFullYear().toString() : `2017 - ${new Date().getFullYear().toString()}`;
     }

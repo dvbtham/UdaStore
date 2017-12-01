@@ -1,0 +1,59 @@
+<form #f="ngForm">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">Thông tin Trang</h3>
+        </div>
+        <div class="box-body">
+          <div class="form-group">
+            <label for="name">Tên Trang</label>
+            <input type="text" required #name="ngModel"
+                   class="form-control" 
+                   name="name"
+                   id="name" [(ngModel)]="page.name"
+                   placeholder="Nhập tên Trang">
+
+            <div class="alert alert-danger" *ngIf="name.touched && name.invalid">
+              Tên Trang là bắt buộc.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="seoTitle">Url trang (ví dụ: duong-dan)</label>
+            <input type="text" required #seoTitle="ngModel"
+                   class="form-control" 
+                   name="seoTitle"
+                   id="seoTitle" [(ngModel)]="page.seoTitle"
+                   placeholder="Nhập Url Trang">
+
+            <div class="alert alert-danger" *ngIf="seoTitle.touched && seoTitle.invalid">
+              Vui lòng nhập Url.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="body">Nội dung</label>
+            <textarea [froalaEditor]="options" name="body" [(froalaModel)]="page.body"
+                      id="body" class="form-control" 
+                      cols="30" rows="10"></textarea>
+          </div>
+
+          <div class="checkbox">
+              <label>
+                <input name="isPublished" [(ngModel)]="page.isPublished" type="checkbox"> 
+                <strong *ngIf="!page.isPublished">Công bố</strong>
+                <strong *ngIf="page.isPublished">Ngưng công bố</strong>
+              </label>
+            </div>
+
+        </div>
+        <div class="box-footer">
+          <button class="btn btn-primary" (click)="save(false)" type="button" [disabled]="!f.valid">Lưu lại</button>
+          <button class="btn btn-info" (click)="save(true)" type="button" [disabled]="!f.valid">Lưu lại và Thoát</button>
+          <a class="btn btn-danger" [routerLink]="['/pages']">Hủy</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

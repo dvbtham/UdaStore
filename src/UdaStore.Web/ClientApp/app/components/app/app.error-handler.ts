@@ -10,7 +10,7 @@ export class AppErrorHandler implements ErrorHandler {
         this.ngZone.run(() => {
             this.toastr.error({
                 title: 'Lỗi',
-                msg: 'Lỗi không mong muốn đã xảy ra.',
+                msg: 'Sự số đã xảy ra khi thực hiện yêu cầu.',
                 theme: 'material',
                 showClose: true,
                 timeout: 5000

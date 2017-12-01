@@ -19,6 +19,7 @@
     "@angular/router": "4.2.5",
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-beta.5",
     "@ngtools/webpack": "1.5.0",
+    "@ngx-loading-bar/http": "^1.0.0-alpha.18",
     "@types/webpack-env": "1.13.0",
     "angular-4-data-table": "^0.2.3",
     "angular-4-data-table-bootstrap-4": "^0.2.0",

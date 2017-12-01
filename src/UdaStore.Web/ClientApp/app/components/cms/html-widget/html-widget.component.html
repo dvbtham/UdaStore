@@ -1,0 +1,66 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="box box-primary">
+      <div class="box-header">
+        <h3 class="box-title">{{ pageTitle }}</h3>
+      </div>
+      <form #f="ngForm">
+        <div class="box-body">
+          <div class="form-group">
+            <label>Tên Widget</label>
+            <input type="text" maxlength="700" required #name="ngModel" class="form-control" name="widgetName" [(ngModel)]="widgetInstance.name"
+              placeholder="Nhập tên Widget...">
+            <div class="alert alert-danger" *ngIf="name.touched && name.invalid">
+              <div *ngIf="name.errors.required">
+                Bạn chưa nhập Tên Widget
+              </div>
+              <div *ngIf="name.errors.maxlength">
+                Chỉ được nhập 700 ký tự
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Vùng Widget</label>
+            <select required #widgetZone="ngModel" name="widgetZoneId" [(ngModel)]="widgetInstance.widgetZoneId" class="form-control">
+              <option value="">-- Vui lòng chọn vùng Widget --</option>
+              <option *ngFor="let wz of widgetZones" value="{{ wz.id }}">{{ wz.name }}</option>
+            </select>
+            <div class="alert alert-danger" *ngIf="widgetZone.touched && widgetZone.invalid">
+              <div *ngIf="widgetZone.errors.required">
+                Bạn chưa chọn Vùng Widget
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="publishStart">Thời gian công bố </label>
+            <owl-date-time name="publishStart" id="publishStart" type="calendar" [locale]="vi" [(ngModel)]="widgetInstance.publishStart"
+              autoClose="true" placeHolder="dd/mm/yyyy" dateFormat="DD/MM/YYYY"></owl-date-time>
+
+          </div>
+
+          <div class="form-group">
+            <label for="publishEnd">Thời gian kết thúc</label>
+            <owl-date-time name="publishEnd" id="publishEnd" type="calendar" [locale]="vi" [(ngModel)]="widgetInstance.publishEnd" autoClose="true"
+              placeHolder="dd/mm/yyyy" dateFormat="DD/MM/YYYY"></owl-date-time>
+
+          </div>
+
+          <div class="form-group">
+            <label>Nội dung Html</label>
+            <textarea required [froalaEditor]="options" class="form-control" name="htmlContent" [(froalaModel)]="widgetInstance.htmlContent"></textarea>
+          </div>
+        </div>
+        <div class="box-footer">
+          <button type="button" (click)="save(false)" [disabled]="!f.valid" class="btn btn-primary">Lưu lại</button>
+          <button type="button" (click)="save(true)" [disabled]="!f.valid" class="btn btn-info">Lưu và Thoát</button>
+          <a [routerLink]="['/widgets']" class="btn btn-danger">Hủy</a>
+        </div>
+      </form>
+
+
+    </div>
+
+  </div>
+</div>

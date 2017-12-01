@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { BrandService } from '../../../services/catalog/brand.service';
 import { Brand } from '../../../models/catalog/brand';
 import { DataTableBase } from '../../../data-table';
+import { DeleteSuccessMessage } from '../../../services/app-service';
 
 @Component({
   selector: 'app-brand',
@@ -17,11 +18,16 @@ export class BrandComponent extends DataTableBase {
   constructor(private brandService: BrandService,
     private toastyService: ToastyService, ) {
     super();
+    
+    this.fetchBrands();
+
+  }
+
+  fetchBrands(){
     this.brandService.getAll().subscribe(items => {
       this.brands = items;
       this.initializeTable(items);
     });
-
   }
 
   filter(query: string) {
@@ -43,14 +49,8 @@ export class BrandComponent extends DataTableBase {
     if (!confirm('Bạn có chắc chắn xóa?')) return;
 
     this.brandService.delete(id).subscribe(res => {
-      this.toastyService.success({
-        title: 'Xóa thành công',
-        msg: 'Dữ liệu đã được xóa.',
-        theme: 'material',
-        timeout: 5000,
-        showClose: true
-      });
-      this.initializeTable(this.items);
+      this.toastyService.success(DeleteSuccessMessage);
+      this.fetchBrands();
     });
 
   }

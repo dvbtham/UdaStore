@@ -21,11 +21,11 @@ export class ProductComponent extends DataTableBase {
 
   fetchData() {
     this.productService.getAll().subscribe((products: any[]) => {
-      this.products = products.sort((l, r): number => {
-        if (l.name < r.name) return -1;
-        if (l.name > r.name) return 1;
-        return 0;
-      })
+        this.products = products.sort((l, r): number => {
+            if (l.name < r.name) return -1;
+            if (l.name > r.name) return 1;
+            return 0;
+        });
       this.initializeTable(products);
     });
   }

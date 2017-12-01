@@ -15,6 +15,7 @@ const treeShakableModules = [
     'zone.js',
 ];
 const nonTreeShakableModules = [
+    '@ngx-loading-bar/core/loading-bar.css',
     'bootstrap',
     'bootstrap/dist/css/bootstrap.css',
     'es6-promise',
