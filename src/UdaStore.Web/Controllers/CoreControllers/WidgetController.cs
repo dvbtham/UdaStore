@@ -6,7 +6,7 @@ using UdaStore.Module.Core.Models;
 namespace UdaStore.Web.Controllers.CoreControllers
 {
     [Route("/api/widgets")]
-    public class WidgetController : Controller
+    public class WidgetController : AuthController
     {
         private readonly IRepository<Widget> _widgetRespository;
 

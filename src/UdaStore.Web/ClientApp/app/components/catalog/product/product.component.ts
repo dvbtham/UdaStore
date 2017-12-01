@@ -49,7 +49,7 @@ export class ProductComponent extends DataTableBase {
 
     this.productService.delete(id).subscribe(res => {
       this.toastyService.success(DeleteSuccessMessage);
-      this.initializeTable(this.products);
+      this.fetchData();
     });
 
   }

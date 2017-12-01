@@ -3,11 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using UdaStore.Infrastructure.Data;
 using UdaStore.Module.Catalog.Models;
 using UdaStore.Module.Catalog.Resources;
+using UdaStore.Web.Controllers.CoreControllers;
 
 namespace UdaStore.Web.Controllers.CatalogControllers
 {
     [Route("/api/product-options")]
-    public class ProductOptionsController : Controller
+    public class ProductOptionsController : AuthController
     {
         private readonly IRepository<ProductOption> _productOptionRepository;
 

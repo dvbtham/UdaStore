@@ -4,6 +4,8 @@ using UdaStore.Infrastructure;
 using UdaStore.Module.Catalog.Resources;
 using UdaStore.Module.Cms.Models;
 using UdaStore.Module.Cms.Resources;
+using UdaStore.Module.Core.Resources;
+using UdaStore.Module.Core.Models;
 
 namespace UdaStore.Web.Mapping
 {
@@ -32,6 +34,7 @@ namespace UdaStore.Web.Mapping
             CreateMap<ProductAttributeGroup, ProductAttributeGroupResource>();
             CreateMap<ProductTemplate, ProductTemplateResource>();
             CreateMap<Page, PageResource>();
+            CreateMap<User, LoginResource>().ForMember(lr => lr.Fullname, opt => opt.MapFrom(u => u.FullName));
 
         }
         private void ResourceToDomain()

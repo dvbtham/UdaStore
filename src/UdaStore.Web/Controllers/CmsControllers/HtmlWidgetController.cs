@@ -3,11 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using UdaStore.Infrastructure.Data;
 using UdaStore.Module.Cms.Resources;
 using UdaStore.Module.Core.Models;
+using UdaStore.Web.Controllers.CoreControllers;
 
 namespace UdaStore.Web.Controllers.CmsControllers
 {
     [Route("/api/html-widgets")]
-    public class HtmlWidgetController : Controller
+    public class HtmlWidgetController : AuthController
     {
         private readonly IRepository<WidgetInstance> _widgetInstanceRepository;
 

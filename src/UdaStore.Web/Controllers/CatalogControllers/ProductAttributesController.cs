@@ -4,11 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using UdaStore.Infrastructure.Data;
 using UdaStore.Module.Catalog.Models;
 using UdaStore.Module.Catalog.Resources;
+using UdaStore.Web.Controllers.CoreControllers;
 
 namespace UdaStore.Web.Controllers.CatalogControllers
 {
     [Route("/api/product-attributes")]
-    public class ProductAttributesController : Controller
+    public class ProductAttributesController : AuthController
     {
         private readonly IRepository<ProductAttribute> _productAttrRepository;
 

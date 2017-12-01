@@ -12,33 +12,33 @@ export class WidgetService extends AppService {
   }
 
   getWidgets() {
-    return this.httpNew.get('/api/widgets').map(response => response.json());
+    return this.httpNew.get('/api/widgets', { headers: this.header }).map(response => response.json());
   }
 
   getWidgetInstances() {
-    return this.httpNew.get('/api/widget-instances').map(response => response.json());
+    return this.httpNew.get('/api/widget-instances', { headers: this.header }).map(response => response.json());
   }
 
   deleteWidgetInstance(id) {
-    return this.httpNew.delete('/api/widget-instances/' + id);
+    return this.httpNew.delete('/api/widget-instances/' + id, { headers: this.header });
   }
 
   getWidgetZones() {
-    return this.httpNew.get('/api/widget-zones').map(response => response.json());
+    return this.httpNew.get('/api/widget-zones', { headers: this.header }).map(response => response.json());
   }
 
   getHtmlWidget(id) {
-    return this.httpNew.get('/api/html-widgets/' + id).map(response => response.json());
+    return this.httpNew.get('/api/html-widgets/' + id, { headers: this.header }).map(response => response.json());
   }
   createHtmlWidget(widgetInstance) {
-    return this.httpNew.post('/api/html-widgets', widgetInstance).map(response => response.json());
+    return this.httpNew.post('/api/html-widgets', widgetInstance, { headers: this.header }).map(response => response.json());
   }
   editHtmlWidget(widgetInstance) {
-    return this.httpNew.put('/api/html-widgets/' + widgetInstance.id, widgetInstance).map(response => response.json());
+    return this.httpNew.put('/api/html-widgets/' + widgetInstance.id, widgetInstance, { headers: this.header }).map(response => response.json());
   }
 
   getCarouselWidget(id) {
-    return this.httpNew.get('api/carousel-widgets/' + id).map(response => response.json());
+    return this.httpNew.get('api/carousel-widgets/' + id, { headers: this.header }).map(response => response.json());
   }
 
   createCarouselWidget(widgetInstance) {
@@ -57,7 +57,7 @@ export class WidgetService extends AppService {
     }
 
     formData.append("formCollection", widgetInstance);
-    return this.httpNew.post('api/carousel-widgets', formData).map(response => response.json());
+    return this.httpNew.post('api/carousel-widgets', formData, { headers: this.header }).map(response => response.json());
   }
 
   convert(str) {
@@ -89,7 +89,7 @@ export class WidgetService extends AppService {
     }
 
     formData.append("formCollection", widgetInstance);
-    return this.httpNew.put('api/carousel-widgets/' + widgetInstance.id, formData).map(response => response.json());
+    return this.httpNew.put('api/carousel-widgets/' + widgetInstance.id, formData, { headers: this.header }).map(response => response.json());
   }
 
 }

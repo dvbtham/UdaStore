@@ -1,39 +1,31 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { DataTableTranslations, DataTableResource, DataTable } from 'data-table-angular-4-bootstrap-3/src';
 import { ToastyService } from 'ng2-toasty';
 import { ProductAttributeGroupService } from '../../../services/catalog/product-attribute-group.service';
 import { KeyValue } from '../../../models/catalog/key-value';
+import { DataTableBase } from '../../../data-table';
+import { DeleteSuccessMessage } from '../../../services/app-service';
 
 @Component({
   selector: 'app-product-attribute-group',
   templateUrl: './product-attribute-group.component.html',
   styleUrls: ['./product-attribute-group.component.css']
 })
-export class ProductAttributeGroupComponent {
+export class ProductAttributeGroupComponent extends DataTableBase {
 
   atrributeGroups: KeyValue[] = [];
-  tableResource = new DataTableResource(this.atrributeGroups);
-  itemCount = 0;
-  items: KeyValue[] = [];
 
-  @ViewChild(DataTable) table;
   constructor(private attributeGroupService: ProductAttributeGroupService,
     private toastyService: ToastyService) {
+    super();
+    this.fetchData();
 
+  }
+
+  fetchData() {
     this.attributeGroupService.getAll().subscribe(atrributeGroup => {
       this.atrributeGroups = atrributeGroup;
       this.initializeTable(atrributeGroup);
     });
-
-  }
-
-  private initializeTable(atrributeGroup: KeyValue[]) {
-    this.tableResource = new DataTableResource(atrributeGroup);
-
-    this.tableResource.query({ offset: 0 })
-      .then(items => this.items = items);
-
-    this.tableResource.count().then(count => this.itemCount = count);
   }
 
   filter(query: string) {
@@ -44,38 +36,13 @@ export class ProductAttributeGroupComponent {
     this.initializeTable(filteredAtrributeGroup);
   }
 
-  reload(params) {
-    this.tableResource.query(params).then(items => this.items = items);
-  }
 
-  cellColor(car) {
-    return 'rgb(255, 255,' + (155 + Math.floor(100 - ((car.rating - 8.7) / 1.3) * 100)) + ')';
-  };
-
-  
   delete(id: number) {
     if (!confirm('Bạn có chắc chắn xóa?')) return;
 
     this.attributeGroupService.delete(id).subscribe(res => {
-      this.toastyService.success({
-        title: 'Xóa thành công',
-        msg: 'Dữ liệu đã được xóa.',
-        theme: 'material',
-        timeout: 5000,
-        showClose: true
-      });
-      this.initializeTable(this.items);
+      this.toastyService.success(DeleteSuccessMessage);
+      this.fetchData();
     });
-
   }
-
-
-  translations = <DataTableTranslations>{
-    indexColumn: 'Thứ tự',
-    expandColumn: 'Mô tả',
-    selectColumn: 'Ô chọn',
-    paginationLimit: 'Tối đa',
-    paginationRange: 'Kết quả'
-  };
-
 }

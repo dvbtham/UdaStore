@@ -8,7 +8,7 @@ using UdaStore.Module.Core.Models;
 namespace UdaStore.Web.Controllers.CoreControllers
 {
     [Route("/api/appsetting")]
-    public class AppSettingController : Controller
+    public class AppSettingController : AuthController
     {
         private readonly IRepository<AppSetting> _appSettingRepository;
         private readonly IConfigurationRoot _configurationRoot;

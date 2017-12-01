@@ -13,9 +13,13 @@ import { Router } from '@angular/router';
 export class UserComponent extends DataTableBase {
   users: any[] = [];
   colunm: string = "fullName";
-  constructor(private userService: UserService, 
+  constructor(private userService: UserService,
     private toastyService: ToastyService, private router: Router) {
     super();
+    this.fetchUsers();
+  }
+
+  fetchUsers() {
     this.userService.getAll().subscribe(users => {
       this.users = users;
       this.initializeTable(users);
@@ -50,7 +54,7 @@ export class UserComponent extends DataTableBase {
     if (confirm('Bạn có chắc chắn muốn xóa người dùng này?')) {
       this.userService.delete(id).subscribe(result => {
         this.toastyService.success(DeleteSuccessMessage);
-        this.router.navigate(['/users']);
+        this.fetchUsers();
       });
     }
     else

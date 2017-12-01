@@ -6,11 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using UdaStore.Infrastructure.Data;
 using UdaStore.Module.Catalog.Models;
 using UdaStore.Module.Catalog.Resources;
+using UdaStore.Web.Controllers.CoreControllers;
 
 namespace UdaStore.Web.Controllers.CatalogControllers
 {
     [Route("/api/product-attribute-group")]
-    public class ProductAttributeGroupController : Controller
+    public class ProductAttributeGroupController : AuthController
     {
         private IRepository<ProductAttributeGroup> _productAttrGroupRepository;
         private readonly IMapper _mapper;

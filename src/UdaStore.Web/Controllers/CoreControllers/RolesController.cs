@@ -6,7 +6,7 @@ using UdaStore.Module.Core.Models;
 namespace UdaStore.Web.Controllers.CoreControllers
 {
     [Route("/api/roles")]
-    public class RolesController : Controller
+    public class RolesController : AuthController
     {
         private readonly IRepository<Role> _roleRepository;
 

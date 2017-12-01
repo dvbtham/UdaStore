@@ -4,10 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
+using System.Text;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +18,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using UdaStore.Infrastructure;
 using UdaStore.Infrastructure.Data;
 using UdaStore.Infrastructure.Web.ModelBinders;
@@ -23,6 +26,7 @@ using UdaStore.Module.Core.Data;
 using UdaStore.Module.Core.Extensions;
 using UdaStore.Module.Core.Models;
 using UdaStore.Module.Core.Persistence;
+using UdaStore.Web.Models;
 
 namespace UdaStore.Web.Extensions
 {
@@ -110,7 +114,7 @@ namespace UdaStore.Web.Extensions
             return services;
         }
 
-        public static IServiceCollection AddCustomizedIdentity(this IServiceCollection services)
+        public static IServiceCollection AddCustomizedIdentity(this IServiceCollection services, IConfiguration configuration)
         {
             services
                 .AddIdentity<User, Role>()
@@ -118,10 +122,38 @@ namespace UdaStore.Web.Extensions
                 .AddUserStore<UdaUserStore>()
                 .AddDefaultTokenProviders();
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(o => o.LoginPath = new PathString("/login"));
+            // services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //     .AddCookie(o => o.LoginPath = new PathString("/login"));
 
-            services.ConfigureApplicationCookie(x => x.LoginPath = new PathString("/login"));
+            // services.ConfigureApplicationCookie(x => x.LoginPath = new PathString("/login"));
+
+            // configure strongly typed settings objects
+            var appSettingsSection = configuration.GetSection("JwtBearerAppsetting");
+            services.Configure<JwtBearerAppsetting>(appSettingsSection);
+
+            // configure jwt authentication
+            var appSettings = appSettingsSection.Get<JwtBearerAppsetting>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
+            //services.AddAuthorization(options => options.AddPolicy("Admin", policy => policy.RequireRole("Admin", "Vendor")));
+
             return services;
         }
 

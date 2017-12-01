@@ -81,7 +81,6 @@ export class ProductFormComponent extends DateTimPickerBase {
       });
       var index = this.indexOf(this.addingOption, this.productOptions);
       if (index < 0) return;
-      console.log(this.addingOption);
       this.productForm.product.options.push(this.addingOption);
       this.productOptions.splice(index, 1);
       this.addingOption = new ProductOption();

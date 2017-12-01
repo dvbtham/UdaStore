@@ -10,11 +10,12 @@ using UdaStore.Infrastructure.Data;
 using UdaStore.Module.Cms.Resources;
 using UdaStore.Module.Core.Models;
 using UdaStore.Module.Core.Services;
+using UdaStore.Web.Controllers.CoreControllers;
 
 namespace UdaStore.Web.Controllers.CmsControllers
 {
     [Route("api/carousel-widgets")]
-    public class CarouselWidgetController : Controller
+    public class CarouselWidgetController : AuthController
     {
         private readonly IRepository<WidgetInstance> _widgetInstanceRepository;
         private readonly IMediaService _mediaService;

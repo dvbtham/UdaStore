@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using UdaStore.Infrastructure;
@@ -15,11 +17,14 @@ using UdaStore.Module.Core.Extensions;
 using UdaStore.Module.Core.Models;
 using UdaStore.Module.Core.Persistence;
 using UdaStore.Web.Extensions;
+using UdaStore.Web.Models;
 
 namespace UdaStore.Web
 {
     public class Startup
     {
+        private const string SecretKey = "iNivDmHLpUA223sqsfhqGbMRdRj1PVkH"; // todo: get this from somewhere secure
+        private readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IConfiguration _configuration;
 
@@ -44,15 +49,19 @@ namespace UdaStore.Web
             GlobalConfiguration.ContentRootPath = _hostingEnvironment.ContentRootPath;
             services.LoadInstalledModules(_hostingEnvironment.ContentRootPath);
 
-            services.AddCustomizedDataStore(_configuration);
-            services.AddCustomizedIdentity();
-
             services.AddSingleton<IConfiguration>(_configuration);
+
+            services.AddCustomizedDataStore(_configuration);
+            services.AddCustomizedIdentity(_configuration);
+
+
             services.AddScoped<SignInManager<User>, UdaSignInManager<User>>();
             services.AddScoped<IWorkContext, WorkContext>();
 
             services.Configure<PhotoSettings>(_configuration.GetSection("PhotoSettings"));
             services.Configure<FileSettings>(_configuration.GetSection("FileSettings"));
+
+            services.AddCors();
 
             services.AddAutoMapper();
 
@@ -81,6 +90,7 @@ namespace UdaStore.Web
             }
 
             app.UseCustomizedStaticFiles(env);
+
             app.UseCustomizedIdentity();
 
             app.UseMvc(routes =>

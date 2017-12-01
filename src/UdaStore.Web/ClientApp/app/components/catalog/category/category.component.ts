@@ -16,11 +16,14 @@ export class CategoryComponent extends DataTableBase {
   constructor(private categoryService: CategoryService,
     private toastyService: ToastyService) {
     super();
+    this.fetchCategories();
+  }
+
+  fetchCategories() {
     this.categoryService.getAll().subscribe(res => {
       this.categories = res;
       this.initializeTable(res);
     });
-
   }
 
   filter(query: string) {
@@ -35,7 +38,7 @@ export class CategoryComponent extends DataTableBase {
     const category = this.categories.find(x => x.id == id);
     if (category != null) {
       category.isPublished = !category.isPublished;
-      this.categoryService.update(id, category).subscribe();
+      this.categoryService.update(id, category).subscribe(() => this.fetchCategories());
     }
 
   }
@@ -45,7 +48,7 @@ export class CategoryComponent extends DataTableBase {
 
     this.categoryService.delete(id).subscribe(res => {
       this.toastyService.success(DeleteSuccessMessage);
-      this.initializeTable(this.categories);
+      this.fetchCategories();
     });
 
   }

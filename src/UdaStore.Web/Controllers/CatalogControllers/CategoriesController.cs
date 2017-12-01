@@ -16,11 +16,12 @@ using AutoMapper;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http.Internal;
+using UdaStore.Web.Controllers.CoreControllers;
 
 namespace UdaStore.Web.Controllers.CatalogControllers
 {
     [Route("/api/categories")]
-    public class CategoriesController : Controller
+    public class CategoriesController : AuthController
     {
         private readonly IRepository<Category> _categoryRepository;
         private readonly ICategoryService _categoryService;

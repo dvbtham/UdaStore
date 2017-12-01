@@ -1,3 +1,5 @@
+import { Serializable } from "../catalog/product-option";
+
 export class User {
     id: number;
     fullName: string;
@@ -6,4 +8,12 @@ export class User {
     email: string;
     password: string;
     roleIds: any[] = [];
+}
+
+export class UserProfile extends Serializable {
+    id: number;
+    fullname: string;
+    email: string;
+    token: string;
+    roles: string[] = [];
 }

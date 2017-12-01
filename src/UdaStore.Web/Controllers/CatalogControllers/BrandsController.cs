@@ -1,17 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UdaStore.Infrastructure;
 using UdaStore.Infrastructure.Data;
 using UdaStore.Module.Catalog.Models;
 using UdaStore.Module.Catalog.Resources;
 using UdaStore.Module.Catalog.Services;
+using UdaStore.Web.Controllers.CoreControllers;
 
 namespace UdaStore.Web.Controllers.CatalogControllers
 {
     [Route("api/brands")]
-    public class BrandsController : Controller
+    public class BrandsController : AuthController
     {
         private readonly IRepository<Brand> _repository;
         private readonly IBrandService _brandService;

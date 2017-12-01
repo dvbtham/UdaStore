@@ -1,12 +1,22 @@
+using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using UdaStore.Infrastructure.Data;
 using UdaStore.Module.Core.Data;
 using UdaStore.Module.Core.Models;
 using UdaStore.Module.Core.Resources;
+using UdaStore.Web.Models;
 
 namespace UdaStore.Web.Controllers.CoreControllers
 {
@@ -14,12 +24,16 @@ namespace UdaStore.Web.Controllers.CoreControllers
     public class UserController : Controller
     {
         private readonly UserManager<User> _userManager;
+        private readonly IMapper _mapper;
         private readonly IRepository<User> _userRepository;
-        public UserController(UserManager<User> manager, IRepository<User> userRepository)
+        private readonly JwtBearerAppsetting _appSettings;
+        public UserController(UserManager<User> manager, IMapper mapper,
+        IRepository<User> userRepository, IOptions<JwtBearerAppsetting> appSettings)
         {
             _userRepository = userRepository;
             _userManager = manager;
-
+            _mapper = mapper;
+            _appSettings = appSettings.Value;
         }
 
         public IActionResult List()
@@ -39,6 +53,7 @@ namespace UdaStore.Web.Controllers.CoreControllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult Get(long id)
         {
             var user = _userRepository.Query().Include(x => x.Roles).FirstOrDefault(x => x.Id == id);
@@ -57,6 +72,7 @@ namespace UdaStore.Web.Controllers.CoreControllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Post([FromBody] UserSaveResource model)
         {
             if (ModelState.IsValid)
@@ -70,7 +86,7 @@ namespace UdaStore.Web.Controllers.CoreControllers
                     VendorId = model.VendorId
                 };
 
-                foreach(var roleId in model.RoleIds)
+                foreach (var roleId in model.RoleIds)
                 {
                     var userRole = new UserRole
                     {
@@ -93,7 +109,47 @@ namespace UdaStore.Web.Controllers.CoreControllers
             return new BadRequestObjectResult(ModelState);
         }
 
+        [AllowAnonymous]
+        [HttpPost("token")]
+        public async Task<IActionResult> Authenticate([FromBody]LoginResource loginResource)
+        {
+            var user = await _userManager.FindByNameAsync(loginResource.Username);
+
+            if (user == null)
+                return Unauthorized();
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (roles.Count(x => x.ToLower() == UdaStore.Web.Common.Constants.ADMIN_ROLE || x.ToLower() == UdaStore.Web.Common.Constants.VENDOR_ROLE) == 0)
+                return Unauthorized();
+
+            if (!await _userManager.CheckPasswordAsync(user, loginResource.Password))
+                return Unauthorized();
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.Id.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+            var resource = _mapper.Map(user, loginResource);
+            resource.Roles = roles;
+            return Ok(new
+            {
+                Fullname = resource.Fullname,
+                Token = tokenString,
+                Roles = resource.Roles
+            });
+        }
+
         [HttpPut("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Put(long id, [FromBody] UserSaveResource model)
         {
             if (ModelState.IsValid)
@@ -120,6 +176,7 @@ namespace UdaStore.Web.Controllers.CoreControllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult Delete(long id)
         {
             var user = _userRepository.Query().FirstOrDefault(x => x.Id == id);

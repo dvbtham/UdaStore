@@ -1,11 +1,14 @@
-﻿<div class="wrapper">
+﻿<div class="wrapper" *ngIf="auth.isLoggedIn">
     <header class="main-header">
         <!-- Logo -->
         <a routerLink="/home" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>UDA</b></span>
+            <span class="logo-mini">
+                <b>UDA</b>
+            </span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>Uda</b>Store</span>
+            <span class="logo-lg">
+                <b>Uda</b>Store</span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">
@@ -16,46 +19,24 @@
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
 
-                    <li class="dropdown user user-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <span class="hidden-xs">Alexander Pierce</span>
+                    <li ngbDropdown class="dropdown user user-menu">
+                        <a ngbDropdownToggle href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <span class="hidden-xs">Xin chào {{ auth.fullname }}</span>
                         </a>
-                        <ul class="dropdown-menu">
-                            <!-- User image -->
-                            <li class="user-header">
-                                <!--<img src="~/themes/admin-lte/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">-->
-                                <p>
-                                    Alexander Pierce - Web Developer
-                                    <small>Member since Nov. 2012</small>
-                                </p>
-                            </li>
-                            <!-- Menu Body -->
-                            <li class="user-body">
-                                <div class="row">
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Followers</a>
-                                    </div>
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Sales</a>
-                                    </div>
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Friends</a>
-                                    </div>
-                                </div>
-                                <!-- /.row -->
-                            </li>
-                            <!-- Menu Footer-->
+                        <ul ngbDropdownMenu class="dropdown-menu">
                             <li class="user-footer">
-                                <div class="pull-left">
-                                    <a href="#" class="btn btn-default btn-flat">Profile</a>
-                                </div>
-                                <div class="pull-right">
-                                    <a href="#" class="btn btn-default btn-flat">Sign out</a>
-                                </div>
+                                <a href="#">Đổi mật khẩu</a>
+                                <br>
+                                <a style="cursor: pointer" (click)="auth.logout()">Đăng xuất</a>
                             </li>
                         </ul>
                     </li>
-
+                    <!-- Control Sidebar Toggle Button -->
+                    <li>
+                        <a href="#" data-toggle="control-sidebar">
+                            <i class="fa fa-gears"></i>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -80,5 +61,16 @@
         <strong>Copyright &copy; {{currentDate}} Quản lý hệ thống cửa hàng online Uda Store</strong>
         reserved.
     </footer>
+</div>
 
+<div class="login-box" *ngIf="!auth.isLoggedIn">
+    <div class="login-logo">
+        <a href="/">
+            <b>Uda</b>Store</a>
+    </div>
+    <div class="login-box-body">
+        <p class="login-box-msg">Đăng nhập hệ thống</p>
+        <ng2-toasty [position]="'top-right'"></ng2-toasty>
+        <router-outlet></router-outlet>
+    </div>
 </div>

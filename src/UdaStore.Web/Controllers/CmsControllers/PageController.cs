@@ -1,16 +1,18 @@
 using System;
 using System.Linq;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UdaStore.Infrastructure.Data;
 using UdaStore.Module.Cms.Models;
 using UdaStore.Module.Cms.Resources;
 using UdaStore.Module.Cms.Services;
+using UdaStore.Web.Controllers.CoreControllers;
 
 namespace UdaStore.Web.Controllers.CmsControllers
 {
     [Route("api/pages")]
-    public class PageController : Controller
+    public class PageController : AuthController
     {
         private readonly IMapper _mapper;
         private readonly IRepository<Page> _pageRepository;

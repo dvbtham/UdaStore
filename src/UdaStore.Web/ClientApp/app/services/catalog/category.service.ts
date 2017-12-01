@@ -14,11 +14,11 @@ export class CategoryService extends AppService {
   uploadPhoto(id: number, file: any) {
     let formData = new FormData();
     formData.append('file', file);
-    return this.localHttp.post(this.BASE_END_POINT + "/" + id + "/photo", formData).map(result => result.json());
+    return this.localHttp.post(this.BASE_END_POINT + "/" + id + "/photo", formData, { headers: this.header }).map(result => result.json());
   }
 
   getCategories() {
-    return this.localHttp.get(this.BASE_END_POINT + "/data").map(x => x.json());
+    return this.localHttp.get(this.BASE_END_POINT + "/data", { headers: this.header }).map(x => x.json());
   }
 
 }

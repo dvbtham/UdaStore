@@ -6,7 +6,7 @@ using UdaStore.Module.Core.Models;
 namespace UdaStore.Web.Controllers.CoreControllers
 {
     [Route("/api/widget-zones")]
-    public class WigetZoneController : Controller
+    public class WigetZoneController : AuthController
     {
         private readonly IRepository<WidgetZone> _widgetZoneRespository;
 

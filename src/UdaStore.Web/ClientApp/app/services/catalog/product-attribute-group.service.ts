@@ -12,7 +12,7 @@ export class ProductAttributeGroupService extends AppService {
   }
 
   getGroups() {
-    return this.httpNew.get(this.BASE_END_POINT + "/groups").map(x => x.json());
+    return this.httpNew.get(this.BASE_END_POINT + "/groups", { headers: this.header }).map(x => x.json());
   }
 
 }

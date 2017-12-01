@@ -22,11 +22,12 @@ using UdaStore.Infrastructure.Web.SmartTable;
 using Microsoft.Extensions.Options;
 using UdaStore.Module.Core.Extensions;
 using System.Net.Http;
+using UdaStore.Web.Controllers.CoreControllers;
 
 namespace UdaStore.Web.Controllers.CatalogControllers
 {
     [Route("api/products")]
-    public class ProductsController : Controller
+    public class ProductsController : AuthController
     {
         private readonly IMediaService _mediaService;
         private readonly IRepository<ProductAttributeValue> _productAttributeValueRepository;

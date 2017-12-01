@@ -1,8 +1,12 @@
 using System;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
+using UdaStore.Web.Models;
 
 namespace UdaStore.Web.Extensions
 {
@@ -10,6 +14,12 @@ namespace UdaStore.Web.Extensions
     {
         public static IApplicationBuilder UseCustomizedIdentity(this IApplicationBuilder app)
         {
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
+
             app.UseAuthentication();
             return app;
         }

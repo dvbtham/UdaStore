@@ -7,7 +7,7 @@ using UdaStore.Module.Core.Models;
 namespace UdaStore.Web.Controllers.CoreControllers
 {
     [Route("api/widget-instances")]
-    public class WidgetInstanceController : Controller
+    public class WidgetInstanceController : AuthController
     {
         private readonly IRepository<WidgetInstance> _widgetInstanceRepository;
         private readonly IRepository<Widget> _widgetRespository;

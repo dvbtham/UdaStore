@@ -12,7 +12,7 @@ export class AppSettingService extends AppService{
    }
 
    updateWithoutId(appSetting: AppSetting[]) {
-    return this.newHttp.put(this.BASE_END_POINT, appSetting).map(result => result.json());
+    return this.newHttp.put(this.BASE_END_POINT, appSetting, { headers: this.header }).map(result => result.json());
 }
 
 }

@@ -27,11 +27,11 @@ export class ProductService extends AppService {
     this.emptyFiles(entity);
     formData.append('resource', JSON.stringify(entity));
 
-    return this.newHttp.put(`${this.BASE_END_POINT}/${id}`, formData).map(result => result.json());
+    return this.newHttp.put(`${this.BASE_END_POINT}/${id}`, formData, { headers: this.header }).map(result => result.json());
   }
 
   updateIdOnly(id) {
-    return this.newHttp.get(`${this.BASE_END_POINT}/${id}/idOnly`).map(result => console.log("success"));
+    return this.newHttp.get(`${this.BASE_END_POINT}/${id}/idOnly`, { headers: this.header }).map(result => console.log("success"));
   }
 
   emptyFiles(productForm: ProductForm) {
@@ -44,6 +44,6 @@ export class ProductService extends AppService {
     formData.append('resource', JSON.stringify(entity));
     formData.append('file', file)
     console.log(JSON.stringify(entity));
-    return this.newHttp.post(this.BASE_END_POINT, formData).map(res => res.json());
+    return this.newHttp.post(this.BASE_END_POINT, formData, { headers: this.header }).map(res => res.json());
   }
 }
